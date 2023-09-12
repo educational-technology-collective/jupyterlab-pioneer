@@ -2,28 +2,44 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-
+import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
+import { TelemetryRouter } from './router';
 import { requestAPI } from './handler';
+import { producerCollection } from './events';
 
-/**
- * Initialization data for the jupyterlab-telemetry-system extension.
- */
+const PLUGIN_ID = 'jupyterlab-telemetry-system:plugin';
+
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'jupyterlab-telemetry-system:plugin',
-  description: 'A JupyterLab extension.',
+  id: PLUGIN_ID,
   autoStart: true,
-  activate: (app: JupyterFrontEnd) => {
-    console.log('JupyterLab extension jupyterlab-telemetry-system is activated!');
+  requires: [INotebookTracker],
+  activate: async (
+    app: JupyterFrontEnd,
+    notebookTracker: INotebookTracker
+  ) => {
+    const version = await requestAPI<string>('version');
+    console.log(`${PLUGIN_ID}: ${version}`);
 
-    requestAPI<any>('get-example')
-      .then(data => {
-        console.log(data);
-      })
-      .catch(reason => {
-        console.error(
-          `The jupyterlab_telemetry_system server extension appears to be missing.\n${reason}`
-        );
-      });
+    const config = await requestAPI<any>('config');
+
+    const telemetryRouter = new TelemetryRouter()
+
+    notebookTracker.widgetAdded.connect(
+      async (_, notebookPanel: NotebookPanel) => {
+        await notebookPanel.sessionContext.ready; // wait until session id is created
+        await telemetryRouter.loadNotebookPanel(notebookPanel);
+
+        producerCollection.forEach(producer => {
+          if (config.activeEvents.includes(producer.id)) {
+            new producer().listen(
+              notebookPanel,
+              telemetryRouter,
+              config.logNotebookContentEvents.includes(producer.id)
+            );
+          }
+        });
+      }
+    );
   }
 };
 
