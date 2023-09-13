@@ -69,7 +69,7 @@ export class NotebookScrollProducer {
     notebookPanel.content.node.addEventListener('scroll', async (e: Event) => {
       e.stopPropagation();
       clearTimeout(this.timeout);
-      // await new Promise(resolve => (this.timeout = setTimeout(resolve, 1500))); // wait 1.5 seconds before preceding
+      await new Promise(resolve => (this.timeout = window.setTimeout(resolve, 1500))); // wait 1.5 seconds before preceding
       const event = {
         eventName: NotebookScrollProducer.id,
         eventTime: Date.now(),
