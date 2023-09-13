@@ -1,23 +1,60 @@
-# jupyterlab_telemetry_system
+# JupyterLab Telemetry System
 
-[![Github Actions Status](https://github.com/educational-technology-collective/jupyterlab-telemetry-system/workflows/Build/badge.svg)](https://github.com/educational-technology-collective/jupyterlab-telemetry-system/actions/workflows/build.yml)
-A JupyterLab extension.
+[![PyPI](https://img.shields.io/pypi/v/jupyterlab-telemetry-system.svg)](https://pypi.org/project/jupyterlab-telemetry-system)
+[![npm](https://img.shields.io/npm/v/jupyterlab-telemetry-system.svg)](https://www.npmjs.com/package/jupyterlab-telemetry-system)
 
-This extension is composed of a Python package named `jupyterlab_telemetry_system`
-for the server extension and a NPM package named `jupyterlab-telemetry-system`
-for the frontend extension.
+A JupyterLab extension for generating and exporting JupyterLab event telemetry data.
 
-## Requirements
+## Get started
 
-- JupyterLab >= 4.0.0
-
-## Install
+### Run the telemetry system with docker compose
+```bash
+# enter the configuration_examples directory and run
+docker compose -p jupyterlab-telemetry-system up --build
+```
+ A JupyterLab application with the telemetry system installed and configured will run on localhost:8888.
+ 
+### Or install the extension and configure it manually
 
 To install the extension, execute:
 
 ```bash
-pip install jupyterlab_telemetry_system
+pip install jupyterlab-telemetry-system
 ```
+Before starting Jupyter Lab with the telemetry system, users need to write their own configuration files (or use the provided configuration examples) and **place them in the correct directory**.
+
+Examples of configurations are [here](#configurations).
+
+## Configurations
+### Overview
+The configuration file controls the activated events and data exporters.
+
+To add a data exporter, users should assign a callable function along with function arguments when configuring `exporters`. This extension provides 4 [default exporters](https://github.com/educational-technology-collective/jupyterlab-telemetry-system/blob/b7eda5f4b286c7b0f7aa50df716b2795f180cc6e/jupyterlab_telemetry_system/handlers.py#L9), `command_line_exporter`, `console_exporter`, `file_exporter` and `remote_exporter`. Users can import default exporters or write customized exporters in the configuration file.
+
+### Configuration file name & path
+
+Jupyter Server expects the configuration file to be named after the extension’s name like so: **`jupyter_{extension name defined in application.py}_config.py`**. So, the configuration file name for this extension is `jupyter_jupyterlab_telemetry_system_config.py`.
+
+Jupyter Server looks for an extension’s config file in a set of specific paths. **The configuration file should be saved into one of the config directories provided by `jupyter --path`.**
+
+Check jupyter server [doc](https://jupyter-server.readthedocs.io/en/latest/operators/configuring-extensions.html) for more details.
+### Syntax
+
+`activateEvents`: An array of the ids of the events. Only valid events (1. has an id associated with the event class, and 2. the event id is included in `activatedEvents`) will be activated.
+
+`logNotebookContentEvents`: An array of the ids of the events. The extension will export the entire notebook content only for valid events (1. has an id associated with the event class, and 2. the event id is included in `logNotebookContentEvents`).
+
+`exporters`: An array of exporters. Each exporter should have the following structure:
+```python
+{
+    exporter: # a callable exporter function. Need to contain 'path' for file_exporter, 'url' for remote_exporter.
+    args: # arguments passed to the exporter function
+}
+```
+**The configuration file should be saved into one of the config directories provided by `jupyter --path`.**
+
+### Example
+[jupyter_jupyterlab_telemetry_system_config.py](https://github.com/educational-technology-collective/jupyterlab-telemetry-system/blob/main/configuration_examples/jupyter_jupyterlab_telemetry_system_config.py)
 
 ## Uninstall
 

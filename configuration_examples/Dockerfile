@@ -21,7 +21,7 @@ RUN apt-get update --yes && \
 
 RUN python3.11 -m pip install --no-cache-dir --upgrade pip \
     && python3.11 -m pip install -U setuptools \
-    && python3.11 -m pip install jupyterlab jupyterlab-telemetry-system
+    && python3.11 -m pip install jupyterlab jupyterlab-telemetry-system==0.1.1
 
 COPY jupyter_jupyterlab_telemetry_system_config.py /etc/jupyter/
 

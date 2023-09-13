@@ -1,5 +1,6 @@
 # This file should be saved into one of the config directories provided by `jupyter --path`.
 
+# activeEvents
 c.JupyterLabTelemetrySystemApp.activeEvents = [
     'NotebookOpenEvent',
     'NotebookScrollEvent',
@@ -15,6 +16,7 @@ c.JupyterLabTelemetrySystemApp.activeEvents = [
     'CellRemoveEvent',
 ]
 
+# logNotebookContentEvents
 c.JupyterLabTelemetrySystemApp.logNotebookContentEvents = [
     'NotebookOpenEvent',
     # 'NotebookScrollEvent',
@@ -30,7 +32,7 @@ c.JupyterLabTelemetrySystemApp.logNotebookContentEvents = [
     # 'CellRemoveEvent',
 ]
 
-# This file should be saved into one of the config directories provided by `jupyter --path`.
+# exporters
 from jupyterlab_telemetry_system import handlers
 
 def customized_exporter(args):
