@@ -1,7 +1,7 @@
 {
   "ServerApp": {
     "jpserver_extensions": {
-      "jupyterlab_telemetry_system": true
+      "jupyterlab_pioneer": true
     }
   }
 }

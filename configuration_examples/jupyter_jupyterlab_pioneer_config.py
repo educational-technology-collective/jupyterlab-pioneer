@@ -1,7 +1,7 @@
 # This file should be saved into one of the config directories provided by `jupyter --path`.
 
 # activeEvents
-c.JupyterLabTelemetrySystemApp.activeEvents = [
+c.JupyterLabPioneerApp.activeEvents = [
     'NotebookOpenEvent',
     'NotebookScrollEvent',
     'NotebookVisibleEvent',
@@ -17,7 +17,7 @@ c.JupyterLabTelemetrySystemApp.activeEvents = [
 ]
 
 # logNotebookContentEvents
-c.JupyterLabTelemetrySystemApp.logNotebookContentEvents = [
+c.JupyterLabPioneerApp.logNotebookContentEvents = [
     'NotebookOpenEvent',
     # 'NotebookScrollEvent',
     # 'NotebookVisibleEvent',
@@ -33,7 +33,7 @@ c.JupyterLabTelemetrySystemApp.logNotebookContentEvents = [
 ]
 
 # exporters
-from jupyterlab_telemetry_system import handlers
+from jupyterlab_pioneer import handlers
 
 def customized_exporter(args):
     # do more here
@@ -41,7 +41,7 @@ def customized_exporter(args):
         'exporter': 'CustomizedCommandLineExporter',
     })
 
-c.JupyterLabTelemetrySystemApp.exporters = [
+c.JupyterLabPioneerApp.exporters = [
     {
         'exporter': handlers.console_exporter,
     },

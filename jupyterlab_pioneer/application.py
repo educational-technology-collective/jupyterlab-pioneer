@@ -2,9 +2,9 @@ from .handlers import RouteHandler
 from jupyter_server.extension.application import ExtensionApp
 from traitlets import List
 
-class JupyterLabTelemetrySystemApp(ExtensionApp):
+class JupyterLabPioneerApp(ExtensionApp):
 
-    name = "jupyterlab_telemetry_system"
+    name = "jupyterlab_pioneer"
 
     activeEvents = List([]).tag(config=True)
     logNotebookContentEvents = List([]).tag(config=True)
@@ -12,8 +12,8 @@ class JupyterLabTelemetrySystemApp(ExtensionApp):
 
     def initialize_settings(self):
         try:
-            assert self.activeEvents, "The c.JupyterLabTelemetrySystemApp.activeEvents configuration setting must be set."
-            assert self.exporters, "The c.JupyterLabTelemetrySystemApp.exporters configuration must be set, please see the configuration example"
+            assert self.activeEvents, "The c.JupyterLabPioneerApp.activeEvents configuration setting must be set."
+            assert self.exporters, "The c.JupyterLabPioneerApp.exporters configuration must be set, please see the configuration example"
 
         except Exception as e:
             self.log.error(str(e))
@@ -21,7 +21,7 @@ class JupyterLabTelemetrySystemApp(ExtensionApp):
 
     def initialize_handlers(self):
         try:
-            self.handlers.extend([(r"/jupyterlab-telemetry-system/(.*)", RouteHandler)])
+            self.handlers.extend([(r"/jupyterlab-pioneer/(.*)", RouteHandler)])
         except Exception as e:
             self.log.error(str(e))
             raise e

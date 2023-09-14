@@ -6,9 +6,9 @@ author_name: Educational Technology Collective
 has_binder: false
 has_settings: false
 kind: server
-labextension_name: jupyterlab-telemetry-system
+labextension_name: jupyterlab-pioneer
 project_short_description: A JupyterLab extension.
-python_name: jupyterlab_telemetry_system
-repository: https://github.com/educational-technology-collective/jupyterlab-telemetry-system
+python_name: jupyterlab_pioneer
+repository: https://github.com/educational-technology-collective/jupyterlab-pioneer
 test: false
 

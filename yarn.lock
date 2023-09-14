@@ -3984,9 +3984,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jupyterlab-telemetry-system@workspace:.":
+"jupyterlab-pioneer@workspace:.":
   version: 0.0.0-use.local
-  resolution: "jupyterlab-telemetry-system@workspace:."
+  resolution: "jupyterlab-pioneer@workspace:."
   dependencies:
     "@jupyterlab/application": ^4.0.0
     "@jupyterlab/builder": ^4.0.0

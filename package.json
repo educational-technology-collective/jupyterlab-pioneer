@@ -1,15 +1,15 @@
 {
-    "name": "jupyterlab-telemetry-system",
-    "version": "0.1.1",
+    "name": "jupyterlab-pioneer",
+    "version": "0.1.2",
     "description": "A JupyterLab extension.",
     "keywords": [
         "jupyter",
         "jupyterlab",
         "jupyterlab-extension"
     ],
-    "homepage": "https://github.com/educational-technology-collective/jupyterlab-telemetry-system",
+    "homepage": "https://github.com/educational-technology-collective/jupyterlab-pioneer",
     "bugs": {
-        "url": "https://github.com/educational-technology-collective/jupyterlab-telemetry-system/issues"
+        "url": "https://github.com/educational-technology-collective/jupyterlab-pioneer/issues"
     },
     "license": "BSD-3-Clause",
     "author": {
@@ -25,7 +25,7 @@
     "style": "style/index.css",
     "repository": {
         "type": "git",
-        "url": "https://github.com/educational-technology-collective/jupyterlab-telemetry-system.git"
+        "url": "https://github.com/educational-technology-collective/jupyterlab-pioneer.git"
     },
     "scripts": {
         "build": "jlpm build:lib && jlpm build:labextension:dev",
@@ -37,7 +37,7 @@
         "clean": "jlpm clean:lib",
         "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
         "clean:lintcache": "rimraf .eslintcache .stylelintcache",
-        "clean:labextension": "rimraf jupyterlab_telemetry_system/labextension jupyterlab_telemetry_system/_version.py",
+        "clean:labextension": "rimraf jupyterlab_pioneer/labextension jupyterlab_pioneer/_version.py",
         "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
         "eslint": "jlpm eslint:check --fix",
         "eslint:check": "eslint . --cache --ext .ts,.tsx",
@@ -99,12 +99,12 @@
                     "pip"
                 ],
                 "base": {
-                    "name": "jupyterlab_telemetry_system"
+                    "name": "jupyterlab_pioneer"
                 }
             }
         },
         "extension": true,
-        "outputDir": "jupyterlab_telemetry_system/labextension"
+        "outputDir": "jupyterlab_pioneer/labextension"
     },
     "eslintIgnore": [
         "node_modules",

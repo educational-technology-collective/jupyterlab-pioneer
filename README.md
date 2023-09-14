@@ -1,27 +1,27 @@
-# JupyterLab Telemetry System
+# JupyterLab Pioneer 
 
-[![PyPI](https://img.shields.io/pypi/v/jupyterlab-telemetry-system.svg)](https://pypi.org/project/jupyterlab-telemetry-system)
-[![npm](https://img.shields.io/npm/v/jupyterlab-telemetry-system.svg)](https://www.npmjs.com/package/jupyterlab-telemetry-system)
+[![PyPI](https://img.shields.io/pypi/v/jupyterlab-pioneer.svg)](https://pypi.org/project/jupyterlab-pioneer)
+[![npm](https://img.shields.io/npm/v/jupyterlab-pioneer.svg)](https://www.npmjs.com/package/jupyterlab-pioneer)
 
 A JupyterLab extension for generating and exporting JupyterLab event telemetry data.
 
 ## Get started
 
-### Run the telemetry system with docker compose
+### Run the extension with docker compose
 ```bash
 # enter the configuration_examples directory and run
-docker compose -p jupyterlab-telemetry-system up --build
+docker compose -p jupyterlab-pioneer up --build
 ```
- A JupyterLab application with the telemetry system installed and configured will run on localhost:8888.
+ A JupyterLab application with the extension installed and configured will run on localhost:8888.
  
 ### Or install the extension and configure it manually
 
 To install the extension, execute:
 
 ```bash
-pip install jupyterlab-telemetry-system
+pip install jupyterlab-pioneer
 ```
-Before starting Jupyter Lab with the telemetry system, users need to write their own configuration files (or use the provided configuration examples) and **place them in the correct directory**.
+Before starting Jupyter Lab, users need to write their own configuration files (or use the provided configuration examples) and **place them in the correct directory**.
 
 Examples of configurations are [here](#configurations).
 
@@ -29,11 +29,11 @@ Examples of configurations are [here](#configurations).
 ### Overview
 The configuration file controls the activated events and data exporters.
 
-To add a data exporter, users should assign a callable function along with function arguments when configuring `exporters`. This extension provides 4 [default exporters](https://github.com/educational-technology-collective/jupyterlab-telemetry-system/blob/b7eda5f4b286c7b0f7aa50df716b2795f180cc6e/jupyterlab_telemetry_system/handlers.py#L9), `command_line_exporter`, `console_exporter`, `file_exporter` and `remote_exporter`. Users can import default exporters or write customized exporters in the configuration file.
+To add a data exporter, users should assign a callable function along with function arguments when configuring `exporters`. This extension provides 4 [default exporters](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/b7eda5f4b286c7b0f7aa50df716b2795f180cc6e/jupyterlab_pioneer/handlers.py#L9), `command_line_exporter`, `console_exporter`, `file_exporter` and `remote_exporter`. Users can import default exporters or write customized exporters in the configuration file.
 
 ### Configuration file name & path
 
-Jupyter Server expects the configuration file to be named after the extension’s name like so: **`jupyter_{extension name defined in application.py}_config.py`**. So, the configuration file name for this extension is `jupyter_jupyterlab_telemetry_system_config.py`.
+Jupyter Server expects the configuration file to be named after the extension’s name like so: **`jupyter_{extension name defined in application.py}_config.py`**. So, the configuration file name for this extension is `jupyter_jupyterlab_pioneer_config.py`.
 
 Jupyter Server looks for an extension’s config file in a set of specific paths. **The configuration file should be saved into one of the config directories provided by `jupyter --path`.**
 
@@ -54,14 +54,14 @@ Check jupyter server [doc](https://jupyter-server.readthedocs.io/en/latest/opera
 **The configuration file should be saved into one of the config directories provided by `jupyter --path`.**
 
 ### Example
-[jupyter_jupyterlab_telemetry_system_config.py](https://github.com/educational-technology-collective/jupyterlab-telemetry-system/blob/main/configuration_examples/jupyter_jupyterlab_telemetry_system_config.py)
+[jupyter_jupyterlab_pioneer_config.py](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/configuration_examples/jupyter_jupyterlab_pioneer_config.py)
 
 ## Uninstall
 
 To remove the extension, execute:
 
 ```bash
-pip uninstall jupyterlab_telemetry_system
+pip uninstall jupyterlab_pioneer
 ```
 
 ## Troubleshoot
@@ -92,13 +92,13 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the jupyterlab_telemetry_system directory
+# Change directory to the jupyterlab_pioneer directory
 # Install package in development mode
 pip install -e "."
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 # Server extension must be manually installed in develop mode
-jupyter server extension enable jupyterlab_telemetry_system
+jupyter server extension enable jupyterlab_pioneer
 # Rebuild extension Typescript source after making changes
 jlpm build
 ```
@@ -124,13 +124,13 @@ jupyter lab build --minimize=False
 
 ```bash
 # Server extension must be manually disabled in develop mode
-jupyter server extension disable jupyterlab_telemetry_system
-pip uninstall jupyterlab_telemetry_system
+jupyter server extension disable jupyterlab_pioneer
+pip uninstall jupyterlab_pioneer
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `jupyterlab-telemetry-system` within that folder.
+folder is located. Then you can remove the symlink named `jupyterlab-pioneer` within that folder.
 
 ### Packaging the extension
 

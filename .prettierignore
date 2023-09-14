@@ -3,4 +3,4 @@ node_modules
 **/lib
 **/package.json
 !/package.json
-jupyterlab_telemetry_system
+jupyterlab_pioneer

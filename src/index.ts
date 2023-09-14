@@ -7,7 +7,7 @@ import { TelemetryRouter } from './router';
 import { requestAPI } from './handler';
 import { producerCollection } from './events';
 
-const PLUGIN_ID = 'jupyterlab-telemetry-system:plugin';
+const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: PLUGIN_ID,

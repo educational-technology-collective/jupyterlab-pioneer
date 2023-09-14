@@ -5,21 +5,21 @@ except ImportError:
     # in editable mode with pip. It is highly recommended to install
     # the package from a stable release or in editable mode: https://pip.pypa.io/en/stable/topics/local-project-installs/#editable-installs
     import warnings
-    warnings.warn("Importing 'jupyterlab_telemetry_system' outside a proper installation.")
+    warnings.warn("Importing 'jupyterlab_pioneer' outside a proper installation.")
     __version__ = "dev"
 
-from .application import JupyterLabTelemetrySystemApp 
+from .application import JupyterLabPioneerApp 
 
 def _jupyter_labextension_paths():
     return [{
         "src": "labextension",
-        "dest": "jupyterlab-telemetry-system"
+        "dest": "jupyterlab-pioneer"
     }]
 
 def _jupyter_server_extension_points():
     return [{
-        "module": "jupyterlab_telemetry_system",
-        "app": JupyterLabTelemetrySystemApp
+        "module": "jupyterlab_pioneer",
+        "app": JupyterLabPioneerApp
     }]
 
-load_jupyter_server_extension = JupyterLabTelemetrySystemApp.load_classic_server_extension
+load_jupyter_server_extension = JupyterLabPioneerApp.load_classic_server_extension
