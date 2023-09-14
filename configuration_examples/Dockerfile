@@ -23,6 +23,6 @@ RUN python3.11 -m pip install --no-cache-dir --upgrade pip \
     && python3.11 -m pip install -U setuptools \
     && python3.11 -m pip install jupyterlab jupyterlab-pioneer==0.1.2
 
-COPY jupyter_jupyterlab_telemetry_system_config.py /etc/jupyter/
+COPY jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
 
 CMD ["jupyter-lab","--ip=0.0.0.0","--no-browser","--allow-root"]
