@@ -29,7 +29,7 @@ Examples of configurations are [here](#configurations).
 ### Overview
 The configuration file controls the activated events and data exporters.
 
-To add a data exporter, users should assign a callable function along with function arguments when configuring `exporters`. This extension provides 4 [default exporters](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/b7eda5f4b286c7b0f7aa50df716b2795f180cc6e/jupyterlab_pioneer/handlers.py#L9), `command_line_exporter`, `console_exporter`, `file_exporter` and `remote_exporter`. Users can import default exporters or write customized exporters in the configuration file.
+To add a data exporter, users should assign a callable function along with function arguments when configuring `exporters`. This extension provides 4 [default exporters](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L9), `command_line_exporter`, `console_exporter`, `file_exporter` and `remote_exporter`. Users can import default exporters or write customized exporters in the configuration file.
 
 ### Configuration file name & path
 
