@@ -15,7 +15,7 @@ docker compose -p jupyterlab-pioneer up --build
 ```
 A JupyterLab application with the extension installed and configured will run on localhost:8888.
 
-(To play with different exporter configurations, edit [Dockerfile](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/configuration_examples/Dockerfile#L28-L32) and run docker compose again)
+(To play with different exporter configurations, edit [Dockerfile](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/configuration_examples/Dockerfile#L32-L36) and run docker compose again)
 
 ### Or install the extension and configure it manually
 
