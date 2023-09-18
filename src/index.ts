@@ -13,16 +13,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: PLUGIN_ID,
   autoStart: true,
   requires: [INotebookTracker],
-  activate: async (
-    app: JupyterFrontEnd,
-    notebookTracker: INotebookTracker
-  ) => {
+  activate: async (app: JupyterFrontEnd, notebookTracker: INotebookTracker) => {
     const version = await requestAPI<string>('version');
     console.log(`${PLUGIN_ID}: ${version}`);
 
     const config = await requestAPI<any>('config');
 
-    const telemetryRouter = new TelemetryRouter()
+    const telemetryRouter = new TelemetryRouter();
 
     notebookTracker.widgetAdded.connect(
       async (_, notebookPanel: NotebookPanel) => {

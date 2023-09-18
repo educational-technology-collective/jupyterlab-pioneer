@@ -12,6 +12,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
 
+# install dependencies
 RUN apt-get update --yes && \
     apt-get install --yes --no-install-recommends \
     curl \
@@ -21,8 +22,13 @@ RUN apt-get update --yes && \
 
 RUN python3.11 -m pip install --no-cache-dir --upgrade pip \
     && python3.11 -m pip install -U setuptools \
-    && python3.11 -m pip install jupyterlab jupyterlab-pioneer==0.1.2
+    && python3.11 -m pip install jupyterlab \
+    && python3.11 -m pip install -U jupyterlab-pioneer
 
-COPY jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
+COPY all_exporters/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
+# COPY console_exporter/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
+# COPY file_exporter/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
+# COPY remote_exporter/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
+# COPY custom_exporter/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
 
 CMD ["jupyter-lab","--ip=0.0.0.0","--no-browser","--allow-root"]

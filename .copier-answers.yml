@@ -11,4 +11,3 @@ project_short_description: A JupyterLab extension.
 python_name: jupyterlab_pioneer
 repository: https://github.com/educational-technology-collective/jupyterlab-pioneer
 test: false
-

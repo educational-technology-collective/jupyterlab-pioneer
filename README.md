@@ -1,4 +1,4 @@
-# JupyterLab Pioneer 
+# JupyterLab Pioneer
 
 [![PyPI](https://img.shields.io/pypi/v/jupyterlab-pioneer.svg)](https://pypi.org/project/jupyterlab-pioneer)
 [![npm](https://img.shields.io/npm/v/jupyterlab-pioneer.svg)](https://www.npmjs.com/package/jupyterlab-pioneer)
@@ -8,12 +8,15 @@ A JupyterLab extension for generating and exporting JupyterLab event telemetry d
 ## Get started
 
 ### Run the extension with docker compose
+
 ```bash
 # enter the configuration_examples directory and run
 docker compose -p jupyterlab-pioneer up --build
 ```
- A JupyterLab application with the extension installed and configured will run on localhost:8888.
- 
+A JupyterLab application with the extension installed and configured will run on localhost:8888.
+
+(To play with different exporter configurations, edit [Dockerfile](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/configuration_examples/Dockerfile#L28-L32) and run docker compose again)
+
 ### Or install the extension and configure it manually
 
 To install the extension, execute:
@@ -21,15 +24,27 @@ To install the extension, execute:
 ```bash
 pip install jupyterlab-pioneer
 ```
+
 Before starting Jupyter Lab, users need to write their own configuration files (or use the provided configuration examples) and **place them in the correct directory**.
 
 Examples of configurations are [here](#configurations).
 
 ## Configurations
+
 ### Overview
+
 The configuration file controls the activated events and data exporters.
 
-To add a data exporter, users should assign a callable function along with function arguments when configuring `exporters`. This extension provides 4 [default exporters](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L9), `command_line_exporter`, `console_exporter`, `file_exporter` and `remote_exporter`. Users can import default exporters or write customized exporters in the configuration file.
+To add a data exporter, users should assign a callable function along with function arguments when configuring `exporters`.
+
+This extension provides 4 default exporters.
+
+- [`console_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L10), which sends telemetry data to the browser console
+- [`command_line_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L33), which sends telemetry data to the python console jupyter is running on
+- [`file_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L55), which saves telemetry data to local file
+- [`remote_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L81), which sends telemetry data to a remote http endpoint
+
+Additionally, users can import default exporters or write customized exporters in the configuration file.
 
 ### Configuration file name & path
 
@@ -38,6 +53,7 @@ Jupyter Server expects the configuration file to be named after the extension’
 Jupyter Server looks for an extension’s config file in a set of specific paths. **The configuration file should be saved into one of the config directories provided by `jupyter --path`.**
 
 Check jupyter server [doc](https://jupyter-server.readthedocs.io/en/latest/operators/configuring-extensions.html) for more details.
+
 ### Syntax
 
 `activateEvents`: An array of the ids of the events. Only valid events (1. has an id associated with the event class, and 2. the event id is included in `activatedEvents`) will be activated.
@@ -45,16 +61,22 @@ Check jupyter server [doc](https://jupyter-server.readthedocs.io/en/latest/opera
 `logNotebookContentEvents`: An array of the ids of the events. The extension will export the entire notebook content only for valid events (1. has an id associated with the event class, and 2. the event id is included in `logNotebookContentEvents`).
 
 `exporters`: An array of exporters. Each exporter should have the following structure:
+
 ```python
 {
     exporter: # a callable exporter function. Need to contain 'path' for file_exporter, 'url' for remote_exporter.
     args: # arguments passed to the exporter function
 }
 ```
-**The configuration file should be saved into one of the config directories provided by `jupyter --path`.**
 
 ### Example
-[jupyter_jupyterlab_pioneer_config.py](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/configuration_examples/jupyter_jupyterlab_pioneer_config.py)
+#### Default exporters
+
+[all_exporters/jupyter_jupyterlab_pioneer_config.py](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/configuration_examples/all_exporters/jupyter_jupyterlab_pioneer_config.py)
+
+#### Custom exporter function
+
+[custom_exporter/jupyter_jupyterlab_pioneer_config.py](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/configuration_examples/custom_exporter/jupyter_jupyterlab_pioneer_config.py)
 
 ## Uninstall
 
