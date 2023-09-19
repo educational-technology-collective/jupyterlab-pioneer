@@ -12,8 +12,9 @@ class JupyterLabPioneerApp(ExtensionApp):
 
     def initialize_settings(self):
         try:
-            assert self.activeEvents, "The c.JupyterLabPioneerApp.activeEvents configuration setting must be set."
-            assert self.exporters, "The c.JupyterLabPioneerApp.exporters configuration must be set, please see the configuration example"
+            # assert self.activeEvents, "The c.JupyterLabPioneerApp.activeEvents configuration setting must be set."
+            # assert self.exporters, "The c.JupyterLabPioneerApp.exporters configuration must be set, please see the configuration example"
+            pass
 
         except Exception as e:
             self.log.error(str(e))
