@@ -13,6 +13,7 @@ A JupyterLab extension for generating and exporting JupyterLab event telemetry d
 # enter the configuration_examples directory and run
 docker compose -p jupyterlab-pioneer up --build
 ```
+
 A JupyterLab application with the extension installed and configured will run on localhost:8888.
 
 (To play with different exporter configurations, edit [Dockerfile](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/configuration_examples/Dockerfile#L32-L36) and run docker compose again)
@@ -70,6 +71,7 @@ Check jupyter server [doc](https://jupyter-server.readthedocs.io/en/latest/opera
 ```
 
 ### Example
+
 #### Default exporters
 
 [all_exporters/jupyter_jupyterlab_pioneer_config.py](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/configuration_examples/all_exporters/jupyter_jupyterlab_pioneer_config.py)

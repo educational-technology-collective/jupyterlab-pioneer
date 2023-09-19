@@ -4,12 +4,7 @@ import { INotebookContent } from '@jupyterlab/nbformat';
 
 import { requestAPI } from './handler';
 
-export interface ITelemetryRouter {
-  loadNotebookPanel(notebookPanel: NotebookPanel): void;
-  publishEvent(eventDetail: Object, logNotebookContent?: Boolean): void;
-}
-
-export class TelemetryRouter implements ITelemetryRouter {
+export class Router {
   private sessionID?: string;
   private notebookPanel?: NotebookPanel;
 
