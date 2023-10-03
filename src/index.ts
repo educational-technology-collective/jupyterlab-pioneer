@@ -38,8 +38,8 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
 
     notebookTracker.widgetAdded.connect(
       async (_, notebookPanel: NotebookPanel) => {
-        await notebookPanel.sessionContext.ready; // wait until session id is created
-        await pioneer.router.loadNotebookPanel(notebookPanel);
+        await notebookPanel.revealed;
+        await notebookPanel.sessionContext.ready;
 
         producerCollection.forEach(producer => {
           if (config.activeEvents.includes(producer.id)) {
