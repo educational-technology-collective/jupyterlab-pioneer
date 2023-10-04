@@ -27,7 +27,7 @@ export class NotebookOpenEventProducer {
           environ: await requestAPI<any>('environ')
         }
       };
-      await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
       this.produced = true;
     }
   }
@@ -79,7 +79,7 @@ export class NotebookScrollProducer {
           cells: getVisibleCells(notebookPanel)
         }
       };
-      await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
     });
   }
 }
@@ -93,7 +93,7 @@ export class NotebookVisibleEventProducer {
     logNotebookContentEvent: boolean
   ) {
     document.addEventListener('visibilitychange', async () => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === 'visible' && document.contains(notebookPanel.node)) {
         const event = {
           eventName: NotebookVisibleEventProducer.id,
           eventTime: Date.now(),
@@ -101,7 +101,7 @@ export class NotebookVisibleEventProducer {
             cells: getVisibleCells(notebookPanel)
           }
         };
-        await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+        await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
       }
     });
   }
@@ -116,13 +116,13 @@ export class NotebookHiddenEventProducer {
     logNotebookContentEvent: boolean
   ) {
     document.addEventListener('visibilitychange', async (e: Event) => {
-      if (document.visibilityState === 'hidden') {
+      if (document.visibilityState === 'hidden' && document.contains(notebookPanel.node)) {
         const event = {
           eventName: NotebookHiddenEventProducer.id,
           eventTime: Date.now(),
           eventInfo: null
         };
-        await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+        await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
       }
     });
   }
@@ -152,7 +152,7 @@ export class ClipboardCopyEventProducer {
           selection: text
         }
       };
-      await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
     });
   }
 }
@@ -180,7 +180,7 @@ export class ClipboardCutEventProducer {
           selection: text
         }
       };
-      await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
     });
   }
 }
@@ -210,7 +210,7 @@ export class ClipboardPasteEventProducer {
           selection: text
         }
       };
-      await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
     });
   }
 }
@@ -239,7 +239,7 @@ export class ActiveCellChangeEventProducer {
               cells: [activatedCell] // activated cell
             }
           };
-          await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
         }
       }
     );
@@ -262,7 +262,7 @@ export class NotebookSaveEventProducer {
             eventTime: Date.now(),
             eventInfo: null
           };
-          await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
         }
       }
     );
@@ -301,7 +301,7 @@ export class CellExecuteEventProducer {
               kernelError: args.success ? null : args.error
             }
           };
-          await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
         }
       }
     );
@@ -330,7 +330,7 @@ export class CellAddEventProducer {
               cells: [addedCell]
             }
           };
-          await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
         }
       }
     );
@@ -359,7 +359,7 @@ export class CellRemoveEventProducer {
               cells: [removedCell]
             }
           };
-          await pioneer.router.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
         }
       }
     );
