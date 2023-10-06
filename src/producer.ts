@@ -148,7 +148,7 @@ export class ClipboardCopyEventProducer {
         eventName: ClipboardCopyEventProducer.id,
         eventTime: Date.now(),
         eventInfo: {
-          cells: [cell],
+          cell: cell,
           selection: text
         }
       };
@@ -176,7 +176,7 @@ export class ClipboardCutEventProducer {
         eventName: ClipboardCutEventProducer.id,
         eventTime: Date.now(),
         eventInfo: {
-          cells: [cell],
+          cell: cell,
           selection: text
         }
       };
@@ -206,7 +206,7 @@ export class ClipboardPasteEventProducer {
         eventName: ClipboardPasteEventProducer.id,
         eventTime: Date.now(),
         eventInfo: {
-          cells: [cell],
+          cell: cell,
           selection: text
         }
       };
@@ -230,13 +230,13 @@ export class ActiveCellChangeEventProducer {
             id: cell?.model.id,
             index: notebookPanel.content.widgets.findIndex(
               value => value === cell
-            )
+            ),
           };
           const event = {
             eventName: ActiveCellChangeEventProducer.id,
             eventTime: Date.now(),
             eventInfo: {
-              cells: [activatedCell] // activated cell
+              cell: activatedCell // activated cell
             }
           };
           await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
@@ -296,7 +296,7 @@ export class CellExecuteEventProducer {
             eventName: CellExecuteEventProducer.id,
             eventTime: Date.now(),
             eventInfo: {
-              cells: [executedCell],
+              cell: executedCell,
               success: args.success,
               kernelError: args.success ? null : args.error
             }
@@ -327,7 +327,7 @@ export class CellAddEventProducer {
             eventName: CellAddEventProducer.id,
             eventTime: Date.now(),
             eventInfo: {
-              cells: [addedCell]
+              cell: addedCell
             }
           };
           await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
@@ -356,7 +356,7 @@ export class CellRemoveEventProducer {
             eventName: CellRemoveEventProducer.id,
             eventTime: Date.now(),
             eventInfo: {
-              cells: [removedCell]
+              cell: removedCell
             }
           };
           await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);

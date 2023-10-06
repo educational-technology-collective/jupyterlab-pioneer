@@ -8,6 +8,7 @@ import { Token } from '@lumino/coreutils';
 import { requestAPI } from './handler';
 // import { Router } from './router';
 import { producerCollection } from './producer';
+import { CellEditEventProducer } from './cellEditEvents';
 
 const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 
@@ -88,6 +89,12 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
             );
           }
         });
+
+        new CellEditEventProducer().listen(
+          notebookPanel,
+          pioneer,
+          false
+        );
       }
     );
 
