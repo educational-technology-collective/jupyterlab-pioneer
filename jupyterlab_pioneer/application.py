@@ -11,6 +11,7 @@ class JupyterLabPioneerApp(ExtensionApp):
     exporters = List([]).tag(config=True)
 
     def initialize_settings(self):
+        # TODO: #16 Is this neccessary now? It appears commented out @mengyanw
         try:
             # assert self.activeEvents, "The c.JupyterLabPioneerApp.activeEvents configuration setting must be set."
             # assert self.exporters, "The c.JupyterLabPioneerApp.exporters configuration must be set, please see the configuration example"

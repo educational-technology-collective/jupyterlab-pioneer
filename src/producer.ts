@@ -365,7 +365,7 @@ export class CellRemoveEventProducer {
     );
   }
 }
-
+// TODO: #14 Put these in ahlphabetical order (minor update) @mengyanw
 export const producerCollection = [
   NotebookOpenEventProducer,
   NotebookScrollProducer,

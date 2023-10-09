@@ -13,6 +13,7 @@ const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 
 export const IJupyterLabPioneer = new Token<IJupyterLabPioneer>(PLUGIN_ID);
 
+// TODO: #13 Can these be deleted now @mengyanw
 // export interface IJupyterLabPioneer {
 //   router: Router;
 // }

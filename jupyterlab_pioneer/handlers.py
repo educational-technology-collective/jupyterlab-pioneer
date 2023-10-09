@@ -6,6 +6,7 @@ from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.httputil import HTTPHeaders
 from tornado.escape import to_unicode
 
+# TODO: #17 This documentation tag is unfamiliar to me (Exporter Starts), can we get rid fo it? For the docs you are writing, can we use sphinx format? Here's an example: https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html @mengyanw
 # *** Exporter Starts *** #
 def console_exporter(args: dict) -> dict:
     """ This exporter sends telemetry data to the browser console.
