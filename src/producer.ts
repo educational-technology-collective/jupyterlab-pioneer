@@ -10,6 +10,267 @@ import { IObservableList } from '@jupyterlab/observables';
 import { IJupyterLabPioneer } from './index';
 import { requestAPI } from './handler';
 
+export class ActiveCellChangeEventProducer {
+  static id: string = 'ActiveCellChangeEvent';
+
+  listen(
+    notebookPanel: NotebookPanel,
+    pioneer: IJupyterLabPioneer,
+    logNotebookContentEvent: boolean
+  ) {
+    notebookPanel.content.activeCellChanged.connect(
+      async (_, cell: Cell<ICellModel> | null) => {
+        if (cell && notebookPanel.content.widgets) {
+          const activatedCell = {
+            id: cell?.model.id,
+            index: notebookPanel.content.widgets.findIndex(
+              value => value === cell
+            )
+          };
+          const event = {
+            eventName: ActiveCellChangeEventProducer.id,
+            eventTime: Date.now(),
+            eventInfo: {
+              cells: [activatedCell] // activated cell
+            }
+          };
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
+        }
+      }
+    );
+  }
+}
+
+export class CellAddEventProducer {
+  static id: string = 'CellAddEvent';
+
+  listen(
+    notebookPanel: NotebookPanel,
+    pioneer: IJupyterLabPioneer,
+    logNotebookContentEvent: boolean
+  ) {
+    notebookPanel.content.model?.cells.changed.connect(
+      async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
+        if (args.type === 'add') {
+          const addedCell = {
+            id: args.newValues[0].id,
+            index: args.newIndex
+          };
+          const event = {
+            eventName: CellAddEventProducer.id,
+            eventTime: Date.now(),
+            eventInfo: {
+              cells: [addedCell]
+            }
+          };
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
+        }
+      }
+    );
+  }
+}
+
+export class CellExecuteEventProducer {
+  static id: string = 'CellExecuteEvent';
+
+  listen(
+    notebookPanel: NotebookPanel,
+    pioneer: IJupyterLabPioneer,
+    logNotebookContentEvent: boolean
+  ) {
+    NotebookActions.executed.connect(
+      async (
+        _: any,
+        args: {
+          notebook: Notebook;
+          cell: Cell<ICellModel>;
+          success: Boolean;
+          error?: KernelError | null | undefined;
+        }
+      ) => {
+        if (notebookPanel.content === args.notebook) {
+          const executedCell = {
+            id: args.cell.model.id,
+            index: args.notebook.widgets.findIndex(value => value == args.cell)
+          };
+          const event = {
+            eventName: CellExecuteEventProducer.id,
+            eventTime: Date.now(),
+            eventInfo: {
+              cells: [executedCell],
+              success: args.success,
+              kernelError: args.success ? null : args.error
+            }
+          };
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
+        }
+      }
+    );
+  }
+}
+
+export class CellRemoveEventProducer {
+  static id: string = 'CellRemoveEvent';
+
+  listen(
+    notebookPanel: NotebookPanel,
+    pioneer: IJupyterLabPioneer,
+    logNotebookContentEvent: boolean
+  ) {
+    notebookPanel.content.model?.cells.changed.connect(
+      async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
+        if (args.type === 'remove') {
+          const removedCell = {
+            newIndex: args.newIndex,
+            oldIndex: args.oldIndex
+          };
+          const event = {
+            eventName: CellRemoveEventProducer.id,
+            eventTime: Date.now(),
+            eventInfo: {
+              cells: [removedCell]
+            }
+          };
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
+        }
+      }
+    );
+  }
+}
+
+export class ClipboardCopyEventProducer {
+  static id: string = 'ClipboardCopyEvent';
+
+  listen(
+    notebookPanel: NotebookPanel,
+    pioneer: IJupyterLabPioneer,
+    logNotebookContentEvent: boolean
+  ) {
+    notebookPanel.node.addEventListener('copy', async () => {
+      const cell = {
+        id: notebookPanel.content.activeCell?.model.id,
+        index: notebookPanel.content.widgets.findIndex(
+          value => value === notebookPanel.content.activeCell
+        )
+      };
+      const text = document.getSelection()?.toString();
+      const event = {
+        eventName: ClipboardCopyEventProducer.id,
+        eventTime: Date.now(),
+        eventInfo: {
+          cells: [cell],
+          selection: text
+        }
+      };
+      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+    });
+  }
+}
+
+export class ClipboardCutEventProducer {
+  static id: string = 'ClipboardCutEvent';
+
+  listen(
+    notebookPanel: NotebookPanel,
+    pioneer: IJupyterLabPioneer,
+    logNotebookContentEvent: boolean
+  ) {
+    notebookPanel.node.addEventListener('cut', async () => {
+      const cell = {
+        id: notebookPanel.content.activeCell?.model.id,
+        index: notebookPanel.content.widgets.findIndex(
+          value => value === notebookPanel.content.activeCell
+        )
+      };
+      const text = document.getSelection()?.toString();
+      const event = {
+        eventName: ClipboardCutEventProducer.id,
+        eventTime: Date.now(),
+        eventInfo: {
+          cells: [cell],
+          selection: text
+        }
+      };
+      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+    });
+  }
+}
+
+export class ClipboardPasteEventProducer {
+  static id: string = 'ClipboardPasteEvent';
+
+  listen(
+    notebookPanel: NotebookPanel,
+    pioneer: IJupyterLabPioneer,
+    logNotebookContentEvent: boolean
+  ) {
+    notebookPanel.node.addEventListener('paste', async (e: ClipboardEvent) => {
+      const cell = {
+        id: notebookPanel.content.activeCell?.model.id,
+        index: notebookPanel.content.widgets.findIndex(
+          value => value === notebookPanel.content.activeCell
+        )
+      };
+      const text = (e.clipboardData || (window as any).clipboardData).getData(
+        'text'
+      );
+      const event = {
+        eventName: ClipboardPasteEventProducer.id,
+        eventTime: Date.now(),
+        eventInfo: {
+          cells: [cell],
+          selection: text
+        }
+      };
+      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+    });
+  }
+}
+
+export class NotebookHiddenEventProducer {
+  static id: string = 'NotebookHiddenEvent';
+
+  listen(
+    notebookPanel: NotebookPanel,
+    pioneer: IJupyterLabPioneer,
+    logNotebookContentEvent: boolean
+  ) {
+    document.addEventListener('visibilitychange', async (e: Event) => {
+      if (
+        document.visibilityState === 'hidden' &&
+        document.contains(notebookPanel.node)
+      ) {
+        const event = {
+          eventName: NotebookHiddenEventProducer.id,
+          eventTime: Date.now(),
+          eventInfo: null
+        };
+        await pioneer.publishEvent(
+          notebookPanel,
+          event,
+          logNotebookContentEvent
+        );
+      }
+    });
+  }
+}
+
 export class NotebookOpenEventProducer {
   static id: string = 'NotebookOpenEvent';
   private produced: boolean = false;
@@ -30,6 +291,33 @@ export class NotebookOpenEventProducer {
       await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
       this.produced = true;
     }
+  }
+}
+
+export class NotebookSaveEventProducer {
+  static id: string = 'NotebookSaveEvent';
+
+  listen(
+    notebookPanel: NotebookPanel,
+    pioneer: IJupyterLabPioneer,
+    logNotebookContentEvent: boolean
+  ) {
+    notebookPanel.context.saveState.connect(
+      async (_, saveState: DocumentRegistry.SaveState) => {
+        if (saveState.match('completed')) {
+          const event = {
+            eventName: NotebookSaveEventProducer.id,
+            eventTime: Date.now(),
+            eventInfo: null
+          };
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
+        }
+      }
+    );
   }
 }
 
@@ -114,303 +402,17 @@ export class NotebookVisibleEventProducer {
   }
 }
 
-export class NotebookHiddenEventProducer {
-  static id: string = 'NotebookHiddenEvent';
-
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
-  ) {
-    document.addEventListener('visibilitychange', async (e: Event) => {
-      if (
-        document.visibilityState === 'hidden' &&
-        document.contains(notebookPanel.node)
-      ) {
-        const event = {
-          eventName: NotebookHiddenEventProducer.id,
-          eventTime: Date.now(),
-          eventInfo: null
-        };
-        await pioneer.publishEvent(
-          notebookPanel,
-          event,
-          logNotebookContentEvent
-        );
-      }
-    });
-  }
-}
-
-export class ClipboardCopyEventProducer {
-  static id: string = 'ClipboardCopyEvent';
-
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
-  ) {
-    notebookPanel.node.addEventListener('copy', async () => {
-      const cell = {
-        id: notebookPanel.content.activeCell?.model.id,
-        index: notebookPanel.content.widgets.findIndex(
-          value => value === notebookPanel.content.activeCell
-        )
-      };
-      const text = document.getSelection()?.toString();
-      const event = {
-        eventName: ClipboardCopyEventProducer.id,
-        eventTime: Date.now(),
-        eventInfo: {
-          cells: [cell],
-          selection: text
-        }
-      };
-      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
-    });
-  }
-}
-export class ClipboardCutEventProducer {
-  static id: string = 'ClipboardCutEvent';
-
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
-  ) {
-    notebookPanel.node.addEventListener('cut', async () => {
-      const cell = {
-        id: notebookPanel.content.activeCell?.model.id,
-        index: notebookPanel.content.widgets.findIndex(
-          value => value === notebookPanel.content.activeCell
-        )
-      };
-      const text = document.getSelection()?.toString();
-      const event = {
-        eventName: ClipboardCutEventProducer.id,
-        eventTime: Date.now(),
-        eventInfo: {
-          cells: [cell],
-          selection: text
-        }
-      };
-      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
-    });
-  }
-}
-export class ClipboardPasteEventProducer {
-  static id: string = 'ClipboardPasteEvent';
-
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
-  ) {
-    notebookPanel.node.addEventListener('paste', async (e: ClipboardEvent) => {
-      const cell = {
-        id: notebookPanel.content.activeCell?.model.id,
-        index: notebookPanel.content.widgets.findIndex(
-          value => value === notebookPanel.content.activeCell
-        )
-      };
-      const text = (e.clipboardData || (window as any).clipboardData).getData(
-        'text'
-      );
-      const event = {
-        eventName: ClipboardPasteEventProducer.id,
-        eventTime: Date.now(),
-        eventInfo: {
-          cells: [cell],
-          selection: text
-        }
-      };
-      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
-    });
-  }
-}
-
-export class ActiveCellChangeEventProducer {
-  static id: string = 'ActiveCellChangeEvent';
-
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
-  ) {
-    notebookPanel.content.activeCellChanged.connect(
-      async (_, cell: Cell<ICellModel> | null) => {
-        if (cell && notebookPanel.content.widgets) {
-          const activatedCell = {
-            id: cell?.model.id,
-            index: notebookPanel.content.widgets.findIndex(
-              value => value === cell
-            )
-          };
-          const event = {
-            eventName: ActiveCellChangeEventProducer.id,
-            eventTime: Date.now(),
-            eventInfo: {
-              cells: [activatedCell] // activated cell
-            }
-          };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            logNotebookContentEvent
-          );
-        }
-      }
-    );
-  }
-}
-
-export class NotebookSaveEventProducer {
-  static id: string = 'NotebookSaveEvent';
-
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
-  ) {
-    notebookPanel.context.saveState.connect(
-      async (_, saveState: DocumentRegistry.SaveState) => {
-        if (saveState.match('completed')) {
-          const event = {
-            eventName: NotebookSaveEventProducer.id,
-            eventTime: Date.now(),
-            eventInfo: null
-          };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            logNotebookContentEvent
-          );
-        }
-      }
-    );
-  }
-}
-
-export class CellExecuteEventProducer {
-  static id: string = 'CellExecuteEvent';
-
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
-  ) {
-    NotebookActions.executed.connect(
-      async (
-        _: any,
-        args: {
-          notebook: Notebook;
-          cell: Cell<ICellModel>;
-          success: Boolean;
-          error?: KernelError | null | undefined;
-        }
-      ) => {
-        if (notebookPanel.content === args.notebook) {
-          const executedCell = {
-            id: args.cell.model.id,
-            index: args.notebook.widgets.findIndex(value => value == args.cell)
-          };
-          const event = {
-            eventName: CellExecuteEventProducer.id,
-            eventTime: Date.now(),
-            eventInfo: {
-              cells: [executedCell],
-              success: args.success,
-              kernelError: args.success ? null : args.error
-            }
-          };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            logNotebookContentEvent
-          );
-        }
-      }
-    );
-  }
-}
-
-export class CellAddEventProducer {
-  static id: string = 'CellAddEvent';
-
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
-  ) {
-    notebookPanel.content.model?.cells.changed.connect(
-      async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
-        if (args.type === 'add') {
-          const addedCell = {
-            id: args.newValues[0].id,
-            index: args.newIndex
-          };
-          const event = {
-            eventName: CellAddEventProducer.id,
-            eventTime: Date.now(),
-            eventInfo: {
-              cells: [addedCell]
-            }
-          };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            logNotebookContentEvent
-          );
-        }
-      }
-    );
-  }
-}
-
-export class CellRemoveEventProducer {
-  static id: string = 'CellRemoveEvent';
-
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
-  ) {
-    notebookPanel.content.model?.cells.changed.connect(
-      async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
-        if (args.type === 'remove') {
-          const removedCell = {
-            newIndex: args.newIndex,
-            oldIndex: args.oldIndex
-          };
-          const event = {
-            eventName: CellRemoveEventProducer.id,
-            eventTime: Date.now(),
-            eventInfo: {
-              cells: [removedCell]
-            }
-          };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            logNotebookContentEvent
-          );
-        }
-      }
-    );
-  }
-}
-// TODO: #14 Put these in ahlphabetical order (minor update) @mengyanw
 export const producerCollection = [
-  NotebookOpenEventProducer,
-  NotebookScrollProducer,
-  NotebookVisibleEventProducer,
-  NotebookHiddenEventProducer,
+  ActiveCellChangeEventProducer,
+  CellAddEventProducer,
+  CellExecuteEventProducer,
+  CellRemoveEventProducer,
   ClipboardCopyEventProducer,
   ClipboardCutEventProducer,
   ClipboardPasteEventProducer,
-  ActiveCellChangeEventProducer,
+  NotebookHiddenEventProducer,
+  NotebookOpenEventProducer,
   NotebookSaveEventProducer,
-  CellExecuteEventProducer,
-  CellAddEventProducer,
-  CellRemoveEventProducer
+  NotebookScrollProducer,
+  NotebookVisibleEventProducer
 ];
