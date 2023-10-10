@@ -93,7 +93,10 @@ export class NotebookVisibleEventProducer {
     logNotebookContentEvent: boolean
   ) {
     document.addEventListener('visibilitychange', async () => {
-      if (document.visibilityState === 'visible' && document.contains(notebookPanel.node)) {
+      if (
+        document.visibilityState === 'visible' &&
+        document.contains(notebookPanel.node)
+      ) {
         const event = {
           eventName: NotebookVisibleEventProducer.id,
           eventTime: Date.now(),
@@ -101,7 +104,11 @@ export class NotebookVisibleEventProducer {
             cells: getVisibleCells(notebookPanel)
           }
         };
-        await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+        await pioneer.publishEvent(
+          notebookPanel,
+          event,
+          logNotebookContentEvent
+        );
       }
     });
   }
@@ -116,13 +123,20 @@ export class NotebookHiddenEventProducer {
     logNotebookContentEvent: boolean
   ) {
     document.addEventListener('visibilitychange', async (e: Event) => {
-      if (document.visibilityState === 'hidden' && document.contains(notebookPanel.node)) {
+      if (
+        document.visibilityState === 'hidden' &&
+        document.contains(notebookPanel.node)
+      ) {
         const event = {
           eventName: NotebookHiddenEventProducer.id,
           eventTime: Date.now(),
           eventInfo: null
         };
-        await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+        await pioneer.publishEvent(
+          notebookPanel,
+          event,
+          logNotebookContentEvent
+        );
       }
     });
   }
@@ -239,7 +253,11 @@ export class ActiveCellChangeEventProducer {
               cells: [activatedCell] // activated cell
             }
           };
-          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
         }
       }
     );
@@ -262,7 +280,11 @@ export class NotebookSaveEventProducer {
             eventTime: Date.now(),
             eventInfo: null
           };
-          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
         }
       }
     );
@@ -301,7 +323,11 @@ export class CellExecuteEventProducer {
               kernelError: args.success ? null : args.error
             }
           };
-          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
         }
       }
     );
@@ -330,7 +356,11 @@ export class CellAddEventProducer {
               cells: [addedCell]
             }
           };
-          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
         }
       }
     );
@@ -359,7 +389,11 @@ export class CellRemoveEventProducer {
               cells: [removedCell]
             }
           };
-          await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            logNotebookContentEvent
+          );
         }
       }
     );
