@@ -79,7 +79,13 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
       async (_, notebookPanel: NotebookPanel) => {
         await notebookPanel.revealed;
         await notebookPanel.sessionContext.ready;
-        
+
+        new CellEditEventProducer().listen(
+          notebookPanel,
+          pioneer,
+          false
+        );
+
         producerCollection.forEach(producer => {
           if (config.activeEvents.includes(producer.id)) {
             new producer().listen(
@@ -90,11 +96,6 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
           }
         });
 
-        new CellEditEventProducer().listen(
-          notebookPanel,
-          pioneer,
-          false
-        );
       }
     );
 
