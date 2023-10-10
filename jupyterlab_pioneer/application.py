@@ -10,17 +10,6 @@ class JupyterLabPioneerApp(ExtensionApp):
     logNotebookContentEvents = List([]).tag(config=True)
     exporters = List([]).tag(config=True)
 
-    def initialize_settings(self):
-        # TODO: #16 Is this neccessary now? It appears commented out @mengyanw
-        try:
-            # assert self.activeEvents, "The c.JupyterLabPioneerApp.activeEvents configuration setting must be set."
-            # assert self.exporters, "The c.JupyterLabPioneerApp.exporters configuration must be set, please see the configuration example"
-            pass
-
-        except Exception as e:
-            self.log.error(str(e))
-            raise e
-
     def initialize_handlers(self):
         try:
             self.handlers.extend([(r"/jupyterlab-pioneer/(.*)", RouteHandler)])
