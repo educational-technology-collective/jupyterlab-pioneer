@@ -1,6 +1,6 @@
-from .handlers import RouteHandler
-from jupyter_server.extension.application import ExtensionApp
 from traitlets import List
+from jupyter_server.extension.application import ExtensionApp
+from .handlers import RouteHandler
 
 class JupyterLabPioneerApp(ExtensionApp):
 
