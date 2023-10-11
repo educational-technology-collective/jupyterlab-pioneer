@@ -45,7 +45,7 @@ export class CellEditEventProducer {
                                     index: notebookPanel.content.widgets.findIndex(
                                         value => value === cell
                                     ),
-                                    doc: v.state.doc.toJSON(),
+                                    // doc: v.state.doc.toJSON(),
                                     changes: v.changes.toJSON()
                                 }
                             };
