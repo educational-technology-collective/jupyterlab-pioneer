@@ -3,7 +3,6 @@ from jupyter_server.extension.application import ExtensionApp
 from .handlers import RouteHandler
 
 class JupyterLabPioneerApp(ExtensionApp):
-
     name = "jupyterlab_pioneer"
 
     activeEvents = List([]).tag(config=True)
