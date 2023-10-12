@@ -8,7 +8,7 @@ import { Token } from '@lumino/coreutils';
 import { requestAPI } from './handler';
 // import { Router } from './router';
 import { producerCollection } from './producer';
-import { CellEditEventProducer } from './cellEditEvents';
+import { CellEditEventProducer } from './cellEditEventProducer';
 
 const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 
