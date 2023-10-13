@@ -22,6 +22,7 @@ export class CellEditEventProducer {
     ) {
         const cellEditEventHandler = 
             async (_: Notebook, cell: Cell<ICellModel> | null) => {
+                await cell?.ready; // wait until cell is ready, to prevent errors when creating new cells
                 const editor = cell?.editor as CodeMirrorEditor
 
                 const event = {
@@ -31,12 +32,12 @@ export class CellEditEventProducer {
                         index: notebookPanel.content.widgets.findIndex(
                             value => value === cell
                         ),
-                        doc: editor.state?.doc?.toJSON(), // send entire cell content if this is a new cell
+                        doc: editor?.state?.doc?.toJSON(), // send entire cell content if this is a new cell
                     }
                 }; 
                 await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
 
-                editor.injectExtension(EditorView.updateListener.of(
+                editor?.injectExtension(EditorView.updateListener.of(
                     async (v: ViewUpdate) => {
                         if (v.docChanged) {
                             const event = {
