@@ -1,17 +1,21 @@
-from ._version import __version__
+import os
+import json
+import inspect
+import tornado
 from jupyter_server.base.handlers import JupyterHandler
 from jupyter_server.extension.handler import ExtensionHandlerMixin
-import os, json, tornado, inspect
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.httputil import HTTPHeaders
 from tornado.escape import to_unicode
+from ._version import __version__
 
-# *** Exporter Starts *** #
 def console_exporter(args: dict) -> dict:
     """ This exporter sends telemetry data to the browser console.
 
     Args:
-        args: arguments that would be passed to the exporter function, defined in the configuration file (except data). It has the following structure:
+        args: arguments that would be passed to the exporter function, 
+        defined in the configuration file (except data). 
+        It has the following structure:
         { \n
             'id': exporter id, optional, \n
             'data': telemetry data \n
@@ -34,7 +38,9 @@ def command_line_exporter(args: dict) -> dict:
     """ This exporter sends telemetry data to the python console jupyter is running on.
 
     Args:
-        args (dict): arguments that would be passed to the exporter function, defined in the configuration file (except data). It has the following structure:
+        args (dict): arguments that would be passed to the exporter function, 
+        defined in the configuration file (except data). 
+        It has the following structure:
         { \n
             'id': exporter id, optional, \n
             'data': telemetry data \n
@@ -50,13 +56,15 @@ def command_line_exporter(args: dict) -> dict:
     print(args['data'])
     return ({
         'exporter': args.get('id') or 'CommandLineExporter',
-    }) 
+    })
 
 def file_exporter(args: dict) -> dict:
     """ This exporter writes telemetry data to local file.
 
     Args:
-        args (dict): arguments that would be passed to the exporter function, defined in the configuration file (except data). It has the following structure:
+        args (dict): arguments that would be passed to the exporter function, 
+        defined in the configuration file (except data). 
+        It has the following structure:
         { \n
             'id': exporter id, optional, \n
             'path': path to the target log file, \n
@@ -70,19 +78,20 @@ def file_exporter(args: dict) -> dict:
         }
     """
 
-    f = open(args.get('path'), 'a+', encoding='utf-8')
-    json.dump(args['data'], f, ensure_ascii=False, indent=4)
-    f.write(',')
-    f.close()
+    with open(args.get('path'), 'a+', encoding='utf-8') as f:
+        json.dump(args['data'], f, ensure_ascii=False, indent=4)
+        f.write(',')
     return({
         'exporter': args.get('id') or 'FileExporter',
     })
- 
+
 async def remote_exporter(args: dict) -> dict:
     """ This exporter sends telemetry data to a remote http endpoint.
 
     Args:
-        args (dict): arguments that would be passed to the exporter function, defined in the configuration file (except data). It has the following structure:
+        args (dict): arguments that would be passed to the exporter function, 
+        defined in the configuration file (except data). 
+        It has the following structure:
         { \n
             'id': exporter id, optional, \n
             'url': http endpoint url, \n
@@ -122,7 +131,6 @@ async def remote_exporter(args: dict) -> dict:
             'body': to_unicode(response.body),
         },
     })
-# *** Exporter Ends *** #
 
 class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
 
@@ -135,11 +143,11 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
     @tornado.web.authenticated
     def get(self, resource):
         try:
-            self.set_header('Content-Type', 'application/json') 
+            self.set_header('Content-Type', 'application/json')
             if resource == 'version':
                 self.finish(json.dumps(__version__))
             elif resource == 'environ':
-                self.finish(json.dumps({k:v for k, v in os.environ.items()}))
+                self.finish(json.dumps(dict(os.environ.items())))
             elif resource == 'config':
                 self.finish(json.dumps({
                     "activeEvents": self.extensionapp.activeEvents,
@@ -177,7 +185,10 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
             args['data'] = data
 
             if callable(exporter):
-                result = await exporter(args) if inspect.iscoroutinefunction(exporter) else exporter(args)
+                if inspect.iscoroutinefunction(exporter):
+                    result = await exporter(args)
+                else:
+                    result = exporter(args)
                 results.append(result)
             else:
                 results.append({
@@ -185,4 +196,3 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
                 })
 
         return results
-

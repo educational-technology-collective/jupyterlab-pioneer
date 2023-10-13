@@ -6,24 +6,11 @@ import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 import { INotebookContent } from '@jupyterlab/nbformat';
 import { Token } from '@lumino/coreutils';
 import { requestAPI } from './handler';
-// import { Router } from './router';
 import { producerCollection } from './producer';
 
 const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 
 export const IJupyterLabPioneer = new Token<IJupyterLabPioneer>(PLUGIN_ID);
-
-// export interface IJupyterLabPioneer {
-//   router: Router;
-// }
-
-// class JupyterLabPioneer implements IJupyterLabPioneer {
-//   router: Router;
-
-//   constructor() {
-//     this.router = new Router();
-//   }
-// }
 
 export interface IJupyterLabPioneer {
   /**
@@ -33,15 +20,22 @@ export interface IJupyterLabPioneer {
    * @param {Object} eventDetail An object containing event details
    * @param {Boolean} logNotebookContent A boolean indicating whether to log the entire notebook or not
    */
-  publishEvent(notebookPanel: NotebookPanel, eventDetail: Object, logNotebookContent?: Boolean) : Promise<void>;
+  publishEvent(
+    notebookPanel: NotebookPanel,
+    eventDetail: Object,
+    logNotebookContent?: Boolean
+  ): Promise<void>;
 }
 
 class JupyterLabPioneer implements IJupyterLabPioneer {
-  async publishEvent(notebookPanel: NotebookPanel, eventDetail: Object, logNotebookContent?: Boolean) {
+  async publishEvent(
+    notebookPanel: NotebookPanel,
+    eventDetail: Object,
+    logNotebookContent?: Boolean
+  ) {
     if (!notebookPanel) {
       throw Error('router is listening to a null notebook panel');
     }
-    // Construct data
     const requestBody = {
       eventDetail: eventDetail,
       notebookState: {
@@ -52,7 +46,6 @@ class JupyterLabPioneer implements IJupyterLabPioneer {
           : null // decide whether to log the entire notebook
       }
     };
-    // Send data to exporters
     const response = await requestAPI<any>('export', {
       method: 'POST',
       body: JSON.stringify(requestBody)
