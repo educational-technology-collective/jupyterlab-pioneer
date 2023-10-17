@@ -6,7 +6,7 @@ import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 import { INotebookContent } from '@jupyterlab/nbformat';
 import { Token } from '@lumino/coreutils';
 import { requestAPI } from './handler';
-// import { producerCollection } from './producer';
+import { producerCollection } from './producer';
 import { ActiveEvent, Config, Exporter } from './types';
 
 const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
@@ -24,7 +24,8 @@ export interface IJupyterLabPioneer {
   publishEvent(
     notebookPanel: NotebookPanel,
     eventDetail: Object,
-    logNotebookContent?: Boolean
+    logWholeNotebook?: Boolean,
+    exporter?: Exporter,
   ): Promise<void>;
 }
 
@@ -32,7 +33,8 @@ class JupyterLabPioneer implements IJupyterLabPioneer {
   async publishEvent(
     notebookPanel: NotebookPanel,
     eventDetail: Object,
-    logNotebookContent?: Boolean
+    logWholeNotebook?: Boolean,
+    exporter?: Exporter
   ) {
     if (!notebookPanel) {
       throw Error('router is listening to a null notebook panel');
@@ -42,10 +44,11 @@ class JupyterLabPioneer implements IJupyterLabPioneer {
       notebookState: {
         sessionID: notebookPanel?.sessionContext.session?.id,
         notebookPath: notebookPanel?.context.path,
-        notebookContent: logNotebookContent
+        notebookContent: logWholeNotebook
           ? (notebookPanel?.model?.toJSON() as INotebookContent)
           : null // decide whether to log the entire notebook
-      }
+      },
+      exporter: exporter
     };
     const response = await requestAPI<any>('export', {
       method: 'POST',
@@ -88,22 +91,24 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
 
     const pioneer = new JupyterLabPioneer();
 
-    // notebookTracker.widgetAdded.connect(
-    //   async (_, notebookPanel: NotebookPanel) => {
-    //     await notebookPanel.revealed;
-    //     await notebookPanel.sessionContext.ready;
+    notebookTracker.widgetAdded.connect(
+      async (_, notebookPanel: NotebookPanel) => {
+        await notebookPanel.revealed;
+        await notebookPanel.sessionContext.ready;
 
-    //     producerCollection.forEach(producer => {
-    //       if (config.activeEvents.includes(producer.id)) {
-    //         new producer().listen(
-    //           notebookPanel,
-    //           pioneer,
-    //           config.logNotebookContentEvents.includes(producer.id)
-    //         );
-    //       }
-    //     });
-    //   }
-    // );
+        processedExporters.forEach(exporter => {
+          producerCollection.forEach(producer => {
+            if (exporter.activeEvents?.map(o => o.name).includes(producer.id)) {
+              new producer().listen(
+                notebookPanel,
+                pioneer,
+                exporter
+              );
+            }
+          });
+        });
+      }
+    );
 
     return pioneer;
   }

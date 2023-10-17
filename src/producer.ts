@@ -11,6 +11,7 @@ import { CodeMirrorEditor } from '@jupyterlab/codemirror';
 import { EditorView, ViewUpdate } from '@codemirror/view';
 import { IJupyterLabPioneer } from './index';
 import { requestAPI } from './handler';
+import { Exporter } from './types';
 
 export class ActiveCellChangeEventProducer {
   static id: string = 'ActiveCellChangeEvent';
@@ -18,7 +19,7 @@ export class ActiveCellChangeEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     notebookPanel.content.activeCellChanged.connect(
       async (_, cell: Cell<ICellModel> | null) => {
@@ -39,7 +40,8 @@ export class ActiveCellChangeEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
-            logNotebookContentEvent
+            exporter.activeEvents?.find(o => o.name == ActiveCellChangeEventProducer.id)?.logWholeNotebook,
+            exporter,
           );
         }
       }
