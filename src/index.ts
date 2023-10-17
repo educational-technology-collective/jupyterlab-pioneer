@@ -6,7 +6,8 @@ import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 import { INotebookContent } from '@jupyterlab/nbformat';
 import { Token } from '@lumino/coreutils';
 import { requestAPI } from './handler';
-import { producerCollection } from './producer';
+// import { producerCollection } from './producer';
+import { ActiveEvent, Config, Exporter } from './types';
 
 const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 
@@ -63,26 +64,46 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
     const version = await requestAPI<string>('version');
     console.log(`${PLUGIN_ID}: ${version}`);
 
-    const config = await requestAPI<any>('config');
+    // TODO: get config from metadata. If not found, use server config.
+    const config = (await requestAPI<any>('config')) as Config;
+    const activeEvents: ActiveEvent[] = config.activeEvents;
+    const exporters: Exporter[] = config.exporters;
+    console.log(config, activeEvents, exporters);
+
+    const processedExporters =
+      activeEvents && activeEvents.length
+        ? exporters.map(e => {
+            if (!e.activeEvents) {
+              e.activeEvents = activeEvents;
+              return e;
+            } else {
+              return e;
+            }
+          })
+        : exporters.filter(
+            e => e.activeEvents && e.activeEvents.length
+          );
+
+    console.log(processedExporters);
 
     const pioneer = new JupyterLabPioneer();
 
-    notebookTracker.widgetAdded.connect(
-      async (_, notebookPanel: NotebookPanel) => {
-        await notebookPanel.revealed;
-        await notebookPanel.sessionContext.ready;
+    // notebookTracker.widgetAdded.connect(
+    //   async (_, notebookPanel: NotebookPanel) => {
+    //     await notebookPanel.revealed;
+    //     await notebookPanel.sessionContext.ready;
 
-        producerCollection.forEach(producer => {
-          if (config.activeEvents.includes(producer.id)) {
-            new producer().listen(
-              notebookPanel,
-              pioneer,
-              config.logNotebookContentEvents.includes(producer.id)
-            );
-          }
-        });
-      }
-    );
+    //     producerCollection.forEach(producer => {
+    //       if (config.activeEvents.includes(producer.id)) {
+    //         new producer().listen(
+    //           notebookPanel,
+    //           pioneer,
+    //           config.logNotebookContentEvents.includes(producer.id)
+    //         );
+    //       }
+    //     });
+    //   }
+    // );
 
     return pioneer;
   }

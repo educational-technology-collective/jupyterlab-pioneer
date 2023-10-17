@@ -6,7 +6,6 @@ class JupyterLabPioneerApp(ExtensionApp):
     name = "jupyterlab_pioneer"
 
     activeEvents = List([]).tag(config=True)
-    logNotebookContentEvents = List([]).tag(config=True)
     exporters = List([]).tag(config=True)
 
     def initialize_handlers(self):
