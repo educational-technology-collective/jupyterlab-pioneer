@@ -1,3 +1,9 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath("."))
+sys.path.insert(0, os.path.abspath('../..'))
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -7,8 +13,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'jupyterlab-pioneer'
-copyright = '2023, Author'
-author = 'Author'
+copyright = '2023, University of Michigan'
+author = 'University of Michigan'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -17,6 +23,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
+    'sphinx.ext.napoleon',
 ]
 
 templates_path = ['_templates']

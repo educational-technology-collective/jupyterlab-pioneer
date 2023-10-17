@@ -1,0 +1,3 @@
+sphinx==7.2.6
+jupyterlab_pioneer==0.1.6
+sphinxcontrib.napoleon==0.7
