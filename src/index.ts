@@ -25,7 +25,7 @@ export interface IJupyterLabPioneer {
     notebookPanel: NotebookPanel,
     eventDetail: Object,
     logWholeNotebook?: Boolean,
-    exporter?: Exporter,
+    exporter?: Exporter
   ): Promise<void>;
 }
 
@@ -83,9 +83,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
               return e;
             }
           })
-        : exporters.filter(
-            e => e.activeEvents && e.activeEvents.length
-          );
+        : exporters.filter(e => e.activeEvents && e.activeEvents.length);
 
     console.log(processedExporters);
 
@@ -99,11 +97,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
         processedExporters.forEach(exporter => {
           producerCollection.forEach(producer => {
             if (exporter.activeEvents?.map(o => o.name).includes(producer.id)) {
-              new producer().listen(
-                notebookPanel,
-                pioneer,
-                exporter
-              );
+              new producer().listen(notebookPanel, pioneer, exporter);
             }
           });
         });

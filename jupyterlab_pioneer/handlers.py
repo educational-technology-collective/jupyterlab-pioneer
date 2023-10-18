@@ -5,6 +5,7 @@ import tornado
 from jupyter_server.base.handlers import JupyterHandler
 from jupyter_server.extension.handler import ExtensionHandlerMixin
 from ._version import __version__
+from .default_exporters import default_exporters
 
 class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
 
@@ -23,7 +24,10 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
             elif resource == 'environ':
                 self.finish(json.dumps(dict(os.environ.items())))
             elif resource == 'config':
-                self.finish(json.dumps(self.config))
+                self.finish(json.dumps({
+                    'activeEvents': self.extensionapp.activeEvents,
+                    'exporters': self.extensionapp.exporters
+                }))
             else:
                 self.set_status(404)
         except Exception as e:
@@ -46,26 +50,24 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
             self.finish(json.dumps(str(e)))
 
     async def export(self):
-        exporters = self.extensionapp.exporters
-        data = json.loads(self.request.body)
-        results = []
-
-        for each in exporters:
-            exporter = each.get('exporter')
-            active_events = each.get('active_events') or self.extensionapp.active_events
-            if data.get('eventDetail').get('eventName') in active_events:
-                args = each.get('args') or {} # id, url, path, params, env
-                args['data'] = data
-
-                if callable(exporter):
-                    if inspect.iscoroutinefunction(exporter):
-                        result = await exporter(args)
-                    else:
-                        result = exporter(args)
-                    results.append(result)
-                else:
-                    results.append({
-                        'message': '[Error] exporter is not callable'
-                    })
-
-        return results
+        body = json.loads(self.request.body)
+        exporter = body.get('exporter')
+        data = {
+            'eventDetail': body.get('eventDetail'),
+            'notebookState': body.get('notebookState')
+        }
+        exporter_type = exporter.get('type')
+        args = exporter.get('args') or {} # id, url, path, params, env
+        args['data'] = data
+        if exporter_type in default_exporters:
+            exporter_func = default_exporters[exporter_type]
+            if inspect.iscoroutinefunction(exporter_func):
+                result = await exporter_func(args)
+            else:
+                result = exporter_func(args)
+            return result
+        else:
+            return {
+                'exporter': exporter_type,
+                'message': '[Error] exporter is not supported'
+            }
