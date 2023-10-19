@@ -7,6 +7,7 @@ import { INotebookContent } from '@jupyterlab/nbformat';
 import { Token } from '@lumino/coreutils';
 import { requestAPI } from './handler';
 import { producerCollection } from './producer';
+import { ActiveEvent, Config, Exporter } from './types';
 
 const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 
@@ -23,7 +24,8 @@ export interface IJupyterLabPioneer {
   publishEvent(
     notebookPanel: NotebookPanel,
     eventDetail: Object,
-    logNotebookContent?: Boolean
+    logWholeNotebook?: Boolean,
+    exporter?: Exporter
   ): Promise<void>;
 }
 
@@ -31,7 +33,8 @@ class JupyterLabPioneer implements IJupyterLabPioneer {
   async publishEvent(
     notebookPanel: NotebookPanel,
     eventDetail: Object,
-    logNotebookContent?: Boolean
+    logWholeNotebook?: Boolean,
+    exporter?: Exporter
   ) {
     if (!notebookPanel) {
       throw Error('router is listening to a null notebook panel');
@@ -41,10 +44,11 @@ class JupyterLabPioneer implements IJupyterLabPioneer {
       notebookState: {
         sessionID: notebookPanel?.sessionContext.session?.id,
         notebookPath: notebookPanel?.context.path,
-        notebookContent: logNotebookContent
+        notebookContent: logWholeNotebook
           ? (notebookPanel?.model?.toJSON() as INotebookContent)
           : null // decide whether to log the entire notebook
-      }
+      },
+      exporter: exporter
     };
     const response = await requestAPI<any>('export', {
       method: 'POST',
@@ -63,7 +67,25 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
     const version = await requestAPI<string>('version');
     console.log(`${PLUGIN_ID}: ${version}`);
 
-    const config = await requestAPI<any>('config');
+    // TODO: get config from metadata. If not found, use server config.
+    const config = (await requestAPI<any>('config')) as Config;
+    const activeEvents: ActiveEvent[] = config.activeEvents;
+    const exporters: Exporter[] = config.exporters;
+    console.log(config);
+
+    const processedExporters =
+      activeEvents && activeEvents.length
+        ? exporters.map(e => {
+            if (!e.activeEvents) {
+              e.activeEvents = activeEvents;
+              return e;
+            } else {
+              return e;
+            }
+          })
+        : exporters.filter(e => e.activeEvents && e.activeEvents.length);
+
+    console.log(processedExporters);
 
     const pioneer = new JupyterLabPioneer();
 
@@ -72,14 +94,12 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
         await notebookPanel.revealed;
         await notebookPanel.sessionContext.ready;
 
-        producerCollection.forEach(producer => {
-          if (config.activeEvents.includes(producer.id)) {
-            new producer().listen(
-              notebookPanel,
-              pioneer,
-              config.logNotebookContentEvents.includes(producer.id)
-            );
-          }
+        processedExporters.forEach(exporter => {
+          producerCollection.forEach(producer => {
+            if (exporter.activeEvents?.map(o => o.name).includes(producer.id)) {
+              new producer().listen(notebookPanel, pioneer, exporter);
+            }
+          });
         });
       }
     );

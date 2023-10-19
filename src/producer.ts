@@ -11,6 +11,7 @@ import { CodeMirrorEditor } from '@jupyterlab/codemirror';
 import { EditorView, ViewUpdate } from '@codemirror/view';
 import { IJupyterLabPioneer } from './index';
 import { requestAPI } from './handler';
+import { Exporter } from './types';
 
 export class ActiveCellChangeEventProducer {
   static id: string = 'ActiveCellChangeEvent';
@@ -18,7 +19,7 @@ export class ActiveCellChangeEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     notebookPanel.content.activeCellChanged.connect(
       async (_, cell: Cell<ICellModel> | null) => {
@@ -39,7 +40,10 @@ export class ActiveCellChangeEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
-            logNotebookContentEvent
+            exporter.activeEvents?.find(
+              o => o.name == ActiveCellChangeEventProducer.id
+            )?.logWholeNotebook,
+            exporter
           );
         }
       }
@@ -53,7 +57,7 @@ export class CellAddEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     notebookPanel.content.model?.cells.changed.connect(
       async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
@@ -72,7 +76,9 @@ export class CellAddEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
-            logNotebookContentEvent
+            exporter.activeEvents?.find(o => o.name == CellAddEventProducer.id)
+              ?.logWholeNotebook,
+            exporter
           );
         }
       }
@@ -86,7 +92,7 @@ export class CellEditEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     const sendDoc = async (_: Notebook, cell: Cell<ICellModel> | null) => {
       await cell?.ready; // wait until cell is ready, to prevent errors when creating new cells
@@ -102,7 +108,13 @@ export class CellEditEventProducer {
           doc: editor?.state?.doc?.toJSON() // send entire cell content if this is a new cell
         }
       };
-      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(
+        notebookPanel,
+        event,
+        exporter.activeEvents?.find(o => o.name == CellEditEventProducer.id)
+          ?.logWholeNotebook,
+        exporter
+      );
     };
 
     const addDocChangeListener = async (cell: Cell<ICellModel> | null) => {
@@ -125,7 +137,8 @@ export class CellEditEventProducer {
             await pioneer.publishEvent(
               notebookPanel,
               event,
-              logNotebookContentEvent
+              false, // do not log whole notebook for doc changes
+              exporter
             );
           }
         })
@@ -154,7 +167,7 @@ export class CellExecuteEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     NotebookActions.executed.connect(
       async (
@@ -183,7 +196,10 @@ export class CellExecuteEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
-            logNotebookContentEvent
+            exporter.activeEvents?.find(
+              o => o.name == CellExecuteEventProducer.id
+            )?.logWholeNotebook,
+            exporter
           );
         }
       }
@@ -197,7 +213,7 @@ export class CellRemoveEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     notebookPanel.content.model?.cells.changed.connect(
       async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
@@ -216,7 +232,10 @@ export class CellRemoveEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
-            logNotebookContentEvent
+            exporter.activeEvents?.find(
+              o => o.name == CellRemoveEventProducer.id
+            )?.logWholeNotebook,
+            exporter
           );
         }
       }
@@ -230,7 +249,7 @@ export class ClipboardCopyEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     notebookPanel.node.addEventListener('copy', async () => {
       const cell = {
@@ -248,7 +267,14 @@ export class ClipboardCopyEventProducer {
           selection: text
         }
       };
-      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(
+        notebookPanel,
+        event,
+        exporter.activeEvents?.find(
+          o => o.name == ClipboardCopyEventProducer.id
+        )?.logWholeNotebook,
+        exporter
+      );
     });
   }
 }
@@ -259,7 +285,7 @@ export class ClipboardCutEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     notebookPanel.node.addEventListener('cut', async () => {
       const cell = {
@@ -277,7 +303,13 @@ export class ClipboardCutEventProducer {
           selection: text
         }
       };
-      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(
+        notebookPanel,
+        event,
+        exporter.activeEvents?.find(o => o.name == ClipboardCutEventProducer.id)
+          ?.logWholeNotebook,
+        exporter
+      );
     });
   }
 }
@@ -288,7 +320,7 @@ export class ClipboardPasteEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     notebookPanel.node.addEventListener('paste', async (e: ClipboardEvent) => {
       const cell = {
@@ -308,7 +340,14 @@ export class ClipboardPasteEventProducer {
           selection: text
         }
       };
-      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(
+        notebookPanel,
+        event,
+        exporter.activeEvents?.find(
+          o => o.name == ClipboardPasteEventProducer.id
+        )?.logWholeNotebook,
+        exporter
+      );
     });
   }
 }
@@ -319,7 +358,7 @@ export class NotebookHiddenEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     document.addEventListener('visibilitychange', async (e: Event) => {
       if (
@@ -334,7 +373,10 @@ export class NotebookHiddenEventProducer {
         await pioneer.publishEvent(
           notebookPanel,
           event,
-          logNotebookContentEvent
+          exporter.activeEvents?.find(
+            o => o.name == NotebookHiddenEventProducer.id
+          )?.logWholeNotebook,
+          exporter
         );
       }
     });
@@ -348,7 +390,7 @@ export class NotebookOpenEventProducer {
   async listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     if (!this.produced) {
       const event = {
@@ -358,7 +400,13 @@ export class NotebookOpenEventProducer {
           environ: await requestAPI<any>('environ')
         }
       };
-      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(
+        notebookPanel,
+        event,
+        exporter.activeEvents?.find(o => o.name == NotebookOpenEventProducer.id)
+          ?.logWholeNotebook,
+        exporter
+      );
       this.produced = true;
     }
   }
@@ -370,7 +418,7 @@ export class NotebookSaveEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     notebookPanel.context.saveState.connect(
       async (_, saveState: DocumentRegistry.SaveState) => {
@@ -383,7 +431,10 @@ export class NotebookSaveEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
-            logNotebookContentEvent
+            exporter.activeEvents?.find(
+              o => o.name == NotebookSaveEventProducer.id
+            )?.logWholeNotebook,
+            exporter
           );
         }
       }
@@ -422,7 +473,7 @@ export class NotebookScrollProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     notebookPanel.content.node.addEventListener('scroll', async (e: Event) => {
       e.stopPropagation();
@@ -437,7 +488,13 @@ export class NotebookScrollProducer {
           cells: getVisibleCells(notebookPanel)
         }
       };
-      await pioneer.publishEvent(notebookPanel, event, logNotebookContentEvent);
+      await pioneer.publishEvent(
+        notebookPanel,
+        event,
+        exporter.activeEvents?.find(o => o.name == NotebookScrollProducer.id)
+          ?.logWholeNotebook,
+        exporter
+      );
     });
   }
 }
@@ -448,7 +505,7 @@ export class NotebookVisibleEventProducer {
   listen(
     notebookPanel: NotebookPanel,
     pioneer: IJupyterLabPioneer,
-    logNotebookContentEvent: boolean
+    exporter: Exporter
   ) {
     document.addEventListener('visibilitychange', async () => {
       if (
@@ -465,7 +522,10 @@ export class NotebookVisibleEventProducer {
         await pioneer.publishEvent(
           notebookPanel,
           event,
-          logNotebookContentEvent
+          exporter.activeEvents?.find(
+            o => o.name == NotebookVisibleEventProducer.id
+          )?.logWholeNotebook,
+          exporter
         );
       }
     });
