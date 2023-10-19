@@ -72,7 +72,6 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
             return result
         if exporter_type == "custom_exporter":
             custom_exporter = self.extensionapp.custom_exporter
-            print(args.get("id"), custom_exporter, custom_exporter.get(args.get("id")))
             if (
                 custom_exporter
                 and args.get("id") in custom_exporter

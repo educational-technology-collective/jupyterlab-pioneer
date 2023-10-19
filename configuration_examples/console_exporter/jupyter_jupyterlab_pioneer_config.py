@@ -7,7 +7,7 @@ c.JupyterLabPioneerApp.exporters = [
     },
     {
         # sends telemetry data to the python console jupyter is running on
-        "type": "commandline_exporter",
+        "type": "command_line_exporter",
     },
 ]
 

@@ -71,7 +71,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
     const config = (await requestAPI<any>('config')) as Config;
     const activeEvents: ActiveEvent[] = config.activeEvents;
     const exporters: Exporter[] = config.exporters;
-    console.log(config, activeEvents, exporters);
+    console.log(config);
 
     const processedExporters =
       activeEvents && activeEvents.length
