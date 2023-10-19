@@ -67,25 +67,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
     const version = await requestAPI<string>('version');
     console.log(`${PLUGIN_ID}: ${version}`);
 
-    // TODO: get config from metadata. If not found, use server config.
     const config = (await requestAPI<any>('config')) as Config;
-    const activeEvents: ActiveEvent[] = config.activeEvents;
-    const exporters: Exporter[] = config.exporters;
-    console.log(config);
-
-    const processedExporters =
-      activeEvents && activeEvents.length
-        ? exporters.map(e => {
-            if (!e.activeEvents) {
-              e.activeEvents = activeEvents;
-              return e;
-            } else {
-              return e;
-            }
-          })
-        : exporters.filter(e => e.activeEvents && e.activeEvents.length);
-
-    console.log(processedExporters);
 
     const pioneer = new JupyterLabPioneer();
 
@@ -93,6 +75,23 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
       async (_, notebookPanel: NotebookPanel) => {
         await notebookPanel.revealed;
         await notebookPanel.sessionContext.ready;
+
+        const activeEvents: ActiveEvent[] = config.activeEvents;
+        const exporters: Exporter[] = notebookPanel.content.model?.getMetadata('exporters') || config.exporters;
+
+        const processedExporters =
+          activeEvents && activeEvents.length
+            ? exporters.map(e => {
+                if (!e.activeEvents) {
+                  e.activeEvents = activeEvents;
+                  return e;
+                } else {
+                  return e;
+                }
+              })
+            : exporters.filter(e => e.activeEvents && e.activeEvents.length);
+
+        console.log(processedExporters);
 
         processedExporters.forEach(exporter => {
           producerCollection.forEach(producer => {
