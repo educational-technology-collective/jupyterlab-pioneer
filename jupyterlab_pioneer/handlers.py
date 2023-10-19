@@ -70,7 +70,7 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
             else:
                 result = exporter_func(args)
             return result
-        elif exporter_type == "custom_exporter":
+        if exporter_type == "custom_exporter":
             custom_exporter = self.extensionapp.custom_exporter
             print(args.get("id"), custom_exporter, custom_exporter.get(args.get("id")))
             if (
@@ -89,8 +89,7 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
                     "exporter": exporter_type,
                     "message": "[Error] custom exporter is not defined",
                 }
-        else:
-            return {
-                "exporter": exporter_type,
-                "message": "[Error] exporter is not supported",
-            }
+        return {
+            "exporter": exporter_type,
+            "message": "[Error] exporter is not supported",
+        }
