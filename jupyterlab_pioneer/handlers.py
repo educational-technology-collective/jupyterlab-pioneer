@@ -7,8 +7,8 @@ from jupyter_server.extension.handler import ExtensionHandlerMixin
 from ._version import __version__
 from .default_exporters import default_exporters
 
-class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
 
+class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -18,16 +18,20 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
     @tornado.web.authenticated
     def get(self, resource):
         try:
-            self.set_header('Content-Type', 'application/json')
-            if resource == 'version':
+            self.set_header("Content-Type", "application/json")
+            if resource == "version":
                 self.finish(json.dumps(__version__))
-            elif resource == 'environ':
+            elif resource == "environ":
                 self.finish(json.dumps(dict(os.environ.items())))
-            elif resource == 'config':
-                self.finish(json.dumps({
-                    'activeEvents': self.extensionapp.activeEvents,
-                    'exporters': self.extensionapp.exporters
-                }))
+            elif resource == "config":
+                self.finish(
+                    json.dumps(
+                        {
+                            "activeEvents": self.extensionapp.activeEvents,
+                            "exporters": self.extensionapp.exporters,
+                        }
+                    )
+                )
             else:
                 self.set_status(404)
         except Exception as e:
@@ -38,7 +42,7 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
     @tornado.web.authenticated
     async def post(self, resource):
         try:
-            if resource == 'export':
+            if resource == "export":
                 result = await self.export()
                 self.finish(json.dumps(result))
             else:
@@ -51,14 +55,14 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
 
     async def export(self):
         body = json.loads(self.request.body)
-        exporter = body.get('exporter')
+        exporter = body.get("exporter")
         data = {
-            'eventDetail': body.get('eventDetail'),
-            'notebookState': body.get('notebookState')
+            "eventDetail": body.get("eventDetail"),
+            "notebookState": body.get("notebookState"),
         }
-        exporter_type = exporter.get('type')
-        args = exporter.get('args') or {} # id, url, path, params, env
-        args['data'] = data
+        exporter_type = exporter.get("type")
+        args = exporter.get("args") or {}  # id, url, path, params, env
+        args["data"] = data
         if exporter_type in default_exporters:
             exporter_func = default_exporters[exporter_type]
             if inspect.iscoroutinefunction(exporter_func):
@@ -66,8 +70,27 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
             else:
                 result = exporter_func(args)
             return result
+        elif exporter_type == "custom_exporter":
+            custom_exporter = self.extensionapp.custom_exporter
+            print(args.get("id"), custom_exporter, custom_exporter.get(args.get("id")))
+            if (
+                custom_exporter
+                and args.get("id") in custom_exporter
+                and custom_exporter.get(args.get("id"))
+            ):
+                exporter_func = custom_exporter.get(args.get("id"))
+                if inspect.iscoroutinefunction(exporter_func):
+                    result = await exporter_func(args)
+                else:
+                    result = exporter_func(args)
+                return result
+            else:
+                return {
+                    "exporter": exporter_type,
+                    "message": "[Error] custom exporter is not defined",
+                }
         else:
             return {
-                'exporter': exporter_type,
-                'message': '[Error] exporter is not supported'
+                "exporter": exporter_type,
+                "message": "[Error] exporter is not supported",
             }
