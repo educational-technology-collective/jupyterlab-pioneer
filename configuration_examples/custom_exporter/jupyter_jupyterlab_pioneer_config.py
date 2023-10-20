@@ -1,6 +1,6 @@
 # This file should be saved into one of the config directories provided by `jupyter --path`.
 
-def custom_exporter(args):
+def my_custom_exporter(args):
     # write your own exporter logic here
     return {
         "exporter": args.get("id"),
@@ -16,6 +16,10 @@ c.JupyterLabPioneerApp.exporters = [
         },
     }
 ]
+
+c.JupyterLabPioneerApp.custom_exporter = {
+    'MyCustomExporter': my_custom_exporter,
+}
 
 c.JupyterLabPioneerApp.activeEvents = [
     {"name": "ActiveCellChangeEvent", "logWholeNotebook": False},

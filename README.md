@@ -40,12 +40,12 @@ To add a data exporter, users should assign a callable function along with funct
 
 This extension provides 4 default exporters.
 
-- [`console_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L10), which sends telemetry data to the browser console
-- [`command_line_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L33), which sends telemetry data to the python console jupyter is running on
-- [`file_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L55), which saves telemetry data to local file
-- [`remote_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/handlers.py#L81), which sends telemetry data to a remote http endpoint
+- [`console_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L9), which sends telemetry data to the browser console
+- [`command_line_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L32), which sends telemetry data to the python console jupyter is running on
+- [`file_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L57), which saves telemetry data to local file
+- [`remote_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L85), which sends telemetry data to a remote http endpoint
 
-Additionally, users can import default exporters or write customized exporters in the configuration file.
+Additionally, users can write customized exporters in the configuration file.
 
 ### Configuration file name & path
 
@@ -57,16 +57,29 @@ Check jupyter server [doc](https://jupyter-server.readthedocs.io/en/latest/opera
 
 ### Syntax
 
-`activateEvents`: An array of the ids of the events. Only valid events (1. has an id associated with the event class, and 2. the event id is included in `activatedEvents`) will be activated.
-
-`logNotebookContentEvents`: An array of the ids of the events. The extension will export the entire notebook content only for valid events (1. has an id associated with the event class, and 2. the event id is included in `logNotebookContentEvents`).
-
-`exporters`: An array of exporters. Each exporter should have the following structure:
+`activateEvents`: An array of active events. Each active event in the array should have the following structure:
 
 ```python
 {
-    exporter: # a callable exporter function. Need to contain 'path' for file_exporter, 'url' for remote_exporter.
-    args: # arguments passed to the exporter function
+    'name': string # string, event name
+    'logWholeNotebook': # boolean, whether to export the entire notebook content when event is triggered
+}
+```
+
+The extension would only generate and export data for valid events ( 1. that have an id associated with the event class, 2. and the event name is included in `activeEvents`
+).
+The extension will export the entire notebook content only for valid events with the `logWholeNotebook` flag == True.
+
+`exporters`: An array of exporters. Each exporter in the array should have the following structure:
+
+```python
+{
+    'type': # one of 'console_exporter', 'command_line_exporter',
+            # 'file_exporter', 'remote_exporter',
+            # or 'custom_exporter'.
+    'args': # arguments passed to the exporter function.
+            # It needs to contain 'path' for file_exporter, 'url' for remote_exporter.
+    'activeEvents': # exporter's local active_events config will override global activeEvents config
 }
 ```
 

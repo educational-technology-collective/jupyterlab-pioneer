@@ -77,7 +77,9 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
         await notebookPanel.sessionContext.ready;
 
         const activeEvents: ActiveEvent[] = config.activeEvents;
-        const exporters: Exporter[] = notebookPanel.content.model?.getMetadata('exporters') || config.exporters;
+        const exporters: Exporter[] =
+          notebookPanel.content.model?.getMetadata('exporters') ||
+          config.exporters;
 
         const processedExporters =
           activeEvents && activeEvents.length
@@ -90,7 +92,6 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
                 }
               })
             : exporters.filter(e => e.activeEvents && e.activeEvents.length);
-
         console.log(processedExporters);
 
         processedExporters.forEach(exporter => {
