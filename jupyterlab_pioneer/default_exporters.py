@@ -11,18 +11,18 @@ def console_exporter(args: dict) -> dict:
 
     Args:
         args: arguments that would be passed to the exporter function,
-        defined in the configuration file (except data).
-        It has the following structure:
-        { \n
-            'id': exporter id, optional, \n
-            'data': telemetry data \n
-        }
+                defined in the configuration file (except data).
+                It has the following structure:
+                {
+                    'id': exporter id, optional, 
+                    'data': telemetry data 
+                }
 
     Returns:
         dict:
-        { \n
-            'exporter': exporter id or 'ConsoleExporter', \n
-            'message': telemetry data \n
+        {
+            'exporter': exporter id or 'ConsoleExporter',
+            'message': telemetry data 
         }
     """
 
@@ -34,17 +34,17 @@ def command_line_exporter(args: dict) -> dict:
 
     Args:
         args (dict): arguments that would be passed to the exporter function,
-        defined in the configuration file (except data).
-        It has the following structure:
-        { \n
-            'id': exporter id, optional, \n
-            'data': telemetry data \n
-        }
+                    defined in the configuration file (except data).
+                    It has the following structure:
+                    { 
+                        'id': exporter id, optional, 
+                        'data': telemetry data 
+                    }
 
     Returns:
         dict:
-        { \n
-            'exporter': exporter id or 'CommandLineExporter', \n
+        { 
+            'exporter': exporter id or 'CommandLineExporter', 
         }
     """
 
@@ -59,18 +59,18 @@ def file_exporter(args: dict) -> dict:
 
     Args:
         args (dict): arguments that would be passed to the exporter function,
-        defined in the configuration file (except data).
-        It has the following structure:
-        { \n
-            'id': exporter id, optional, \n
-            'path': path to the target log file, \n
-            'data': telemetry data \n
-        }
+                    defined in the configuration file (except data).
+                    It has the following structure:
+                    {
+                        'id': exporter id, optional, 
+                        'path': path to the target log file, 
+                        'data': telemetry data 
+                    }
 
     Returns:
         dict:
-        { \n
-            'exporter': exporter id or 'FileExporter', \n
+        { 
+            'exporter': exporter id or 'FileExporter', 
         }
     """
 
@@ -86,26 +86,27 @@ async def remote_exporter(args: dict) -> dict:
     """This exporter sends telemetry data to a remote http endpoint.
 
     Args:
-        args (dict): arguments that would be passed to the exporter function,
-        defined in the configuration file (except data).
-        It has the following structure:
-        { \n
-            'id': exporter id, optional, \n
-            'url': http endpoint url, \n
-            'params': extra parameters that would be passed to the http endpoint, optional, \n
-            'env': environment variables that would be passed to the http endpoint, optional, \n
-            'data': telemetry data \n
-        }
+        args (dict): 
+                    arguments that would be passed to the exporter function,
+                    defined in the configuration file (except data).
+                    It has the following structure:
+                    { 
+                        'id': exporter id, optional, 
+                        'url': http endpoint url, 
+                        'params': extra parameters that would be passed to the http endpoint, optional, 
+                        'env': environment variables that would be passed to the http endpoint, optional, 
+                        'data': telemetry data 
+                    }
 
     Returns:
         dict:
-        { \n
-            'exporter': exporter id or 'RemoteExporter', \n
-            'message': { \n
-                'code': http response code, \n
-                'reason': http response reason, \n
-                'body': http response body \n
-            } \n
+        { 
+            'exporter': exporter id or 'RemoteExporter', 
+            'message': { 
+                'code': http response code, 
+                'reason': http response reason, 
+                'body': http response body 
+            } 
         }
     """
     http_client = AsyncHTTPClient()
