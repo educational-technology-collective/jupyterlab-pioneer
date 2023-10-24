@@ -61,7 +61,7 @@ Check jupyter server [doc](https://jupyter-server.readthedocs.io/en/latest/opera
 
 ```python
 {
-    'name': string # string, event name
+    'name': # string, event name
     'logWholeNotebook': # boolean, whether to export the entire notebook content when event is triggered
 }
 ```

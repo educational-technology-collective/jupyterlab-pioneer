@@ -26,11 +26,11 @@ RUN apt-get update --yes && \
 RUN python3.11 -m pip install --no-cache-dir --upgrade pip \
     && python3.11 -m pip install -U setuptools \
     && python3.11 -m pip install jupyterlab \
-    && python3.11 -m pip install -U jupyterlab-pioneer
+    && python3.11 -m pip install -U jupyterlab_pioneer
 
 # Copy the jupyterlab-pioneer configuration example file to one of the jupyter config directories
-COPY all_exporters/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
-# COPY console_exporter/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
+# COPY all_exporters/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
+COPY console_exporter/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
 # COPY file_exporter/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
 # COPY remote_exporter/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
 # COPY custom_exporter/jupyter_jupyterlab_pioneer_config.py /etc/jupyter/
