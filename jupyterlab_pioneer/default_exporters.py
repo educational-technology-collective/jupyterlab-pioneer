@@ -1,3 +1,16 @@
+"""This module provides 4 default exporters for the extension. If the exporter function name is mentioned in the configuration file or in the notebook metadata, the extension will use the corresponding exporter function when the jupyter lab event is fired.
+
+Attributes:
+    default_exporters: a map from function names to callable exporter functions::
+
+        default_exporters: dict[str, Callable[[dict], dict or Awaitable[dict]]] = {
+            "console_exporter": console_exporter,
+            "command_line_exporter": command_line_exporter,
+            "file_exporter": file_exporter,
+            "remote_exporter": remote_exporter,
+        }
+"""
+
 import json
 import os
 from collections.abc import Callable, Awaitable
@@ -10,20 +23,23 @@ def console_exporter(args: dict) -> dict:
     """This exporter sends telemetry data to the browser console.
 
     Args:
-        args: arguments that would be passed to the exporter function,
-                defined in the configuration file (except data).
-                It has the following structure:
+        args(dict): arguments to pass to the exporter function, defined in the configuration file (except 'data', which is gathered by the extension). It has the following structure:
+            ::
+
                 {
-                    'id': exporter id, optional, 
-                    'data': telemetry data 
+                    'id': # (optional) exporter id,
+                    'data': # telemetry data
                 }
 
     Returns:
         dict:
-        {
-            'exporter': exporter id or 'ConsoleExporter',
-            'message': telemetry data 
-        }
+            ::
+
+                {
+                    'exporter': # exporter id or 'ConsoleExporter',
+                    'message': # telemetry data
+                }
+
     """
 
     return {"exporter": args.get("id") or "ConsoleExporter", "message": args["data"]}
@@ -33,19 +49,22 @@ def command_line_exporter(args: dict) -> dict:
     """This exporter sends telemetry data to the python console jupyter is running on.
 
     Args:
-        args (dict): arguments that would be passed to the exporter function,
-                    defined in the configuration file (except data).
-                    It has the following structure:
-                    { 
-                        'id': exporter id, optional, 
-                        'data': telemetry data 
-                    }
+        args (dict): arguments to pass to the exporter function, defined in the configuration file (except 'data', which is gathered by the extension). It has the following structure:
+            ::
+
+                {
+                    'id': # (optional) exporter id,
+                    'data': # telemetry data
+                }
 
     Returns:
         dict:
-        { 
-            'exporter': exporter id or 'CommandLineExporter', 
-        }
+            ::
+
+                {
+                    'exporter': # exporter id or 'CommandLineExporter',
+                }
+    
     """
 
     print(args["data"])
@@ -58,20 +77,22 @@ def file_exporter(args: dict) -> dict:
     """This exporter writes telemetry data to local file.
 
     Args:
-        args (dict): arguments that would be passed to the exporter function,
-                    defined in the configuration file (except data).
-                    It has the following structure:
-                    {
-                        'id': exporter id, optional, 
-                        'path': path to the target log file, 
-                        'data': telemetry data 
-                    }
+        args (dict): arguments to pass to the exporter function, defined in the configuration file (except 'data', which is gathered by the extension). It has the following structure:
+            ::
+
+                {
+                    'id': # (optional) exporter id,
+                    'path': # local file path,
+                    'data': # telemetry data
+                }
 
     Returns:
         dict:
-        { 
-            'exporter': exporter id or 'FileExporter', 
-        }
+            ::
+
+                {
+                    'exporter': # exporter id or 'FileExporter',
+                }
     """
 
     with open(args.get("path"), "a+", encoding="utf-8") as f:
@@ -86,28 +107,30 @@ async def remote_exporter(args: dict) -> dict:
     """This exporter sends telemetry data to a remote http endpoint.
 
     Args:
-        args (dict): 
-                    arguments that would be passed to the exporter function,
-                    defined in the configuration file (except data).
-                    It has the following structure:
-                    { 
-                        'id': exporter id, optional, 
-                        'url': http endpoint url, 
-                        'params': extra parameters that would be passed to the http endpoint, optional, 
-                        'env': environment variables that would be passed to the http endpoint, optional, 
-                        'data': telemetry data 
-                    }
+        args (dict): arguments to pass to the exporter function, defined in the configuration file (except 'data', which is gathered by the extension). It has the following structure:
+            ::
+
+                {
+                    'id': # (optional) exporter id,
+                    'url': # http endpoint url,
+                    'params': # (optional) additional parameters to pass to the http endpoint,
+                    'env': # (optional) environment variables to pass to the http endpoint,
+                    'data': # telemetry data
+                }
 
     Returns:
         dict:
-        { 
-            'exporter': exporter id or 'RemoteExporter', 
-            'message': { 
-                'code': http response code, 
-                'reason': http response reason, 
-                'body': http response body 
-            } 
-        }
+            ::
+
+                {
+                    'exporter': exporter id or 'RemoteExporter',
+                    'message': {
+                        'code': http response code,
+                        'reason': http response reason,
+                        'body': http response body
+                    }
+                }
+
     """
     http_client = AsyncHTTPClient()
     request = HTTPRequest(
