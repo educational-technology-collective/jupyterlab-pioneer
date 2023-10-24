@@ -1,7 +1,6 @@
 # This file should be saved into one of the config directories provided by `jupyter --path`.
 
-"""
-An array of the exporters.
+"""An array of the exporters.
 
 This extension provides 4 default exporters in the handlers module:
 `console_exporter`, which sends telemetry data to the browser console.
@@ -67,8 +66,7 @@ c.JupyterLabPioneerApp.exporters = [
     },
 ]
 
-""" 
-An array of active events. 
+"""An array of active events.
 * Global config, could be override by `activeEvents` defined inside of individual exporter configs
 The extension would only generate and export data for valid events (
     1. that have an id associated with the event class, 

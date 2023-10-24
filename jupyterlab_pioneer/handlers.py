@@ -1,3 +1,5 @@
+"""This module defines the extra request handlers the pioneer extension needs
+"""
 import os
 import json
 import inspect
@@ -6,7 +8,6 @@ from jupyter_server.base.handlers import JupyterHandler
 from jupyter_server.extension.handler import ExtensionHandlerMixin
 from ._version import __version__
 from .default_exporters import default_exporters
-
 
 class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
     def __init__(self, *args, **kwargs):
@@ -17,6 +18,22 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
     # Jupyter server
     @tornado.web.authenticated
     def get(self, resource):
+        """GET method
+
+        Args:
+            resource (str): the name of the resource requested. It is expected to be one of "version", "environ", or "config".
+        
+        Returns:
+            str(json):
+                If resource is "version", the server responses with a json serialized obj of the version string.
+
+                If resource is "environ", the server responses with a json serialized obj of current environment variables.
+
+                If resource is "config", the server responses with a json serialized obj containing "activeEvents" and "exporters" configurations from the configuration file.
+
+                For other resources, set the status code to 404 not found.
+        
+        """
         try:
             self.set_header("Content-Type", "application/json")
             if resource == "version":
@@ -41,6 +58,17 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
 
     @tornado.web.authenticated
     async def post(self, resource):
+        """POST method
+
+        Args:
+            resource (str): the name of the resource requested. It is expected to be "export".
+        
+        Returns:
+            str(json):
+            If resource is "export", the server calls the asynchronous export function :func:`export`, and responses with the json serialized export result.
+            
+            For other resources, set the status code to 404 not found.
+        """
         try:
             if resource == "export":
                 result = await self.export()
@@ -54,6 +82,20 @@ class RouteHandler(ExtensionHandlerMixin, JupyterHandler):
             self.finish(json.dumps(str(e)))
 
     async def export(self):
+        """This function exports telemetry data with requested exporters.
+
+        The function first parse the request body to get the event data and the corresponding exporter requested for the event. 
+        Then base on the exporter type, the function either calls the default exporters or tries to access the custom exporter defined in the configuration file. 
+
+        Returns:
+            dict:
+                ::
+
+                    {
+                        "exporter": # exporter type,
+                        "message": # execution message of the exporter function
+                    }
+        """
         body = json.loads(self.request.body)
         exporter = body.get("exporter")
         data = {
