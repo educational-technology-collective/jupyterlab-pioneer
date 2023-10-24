@@ -11,7 +11,7 @@ A JupyterLab extension for generating and exporting JupyterLab event telemetry d
 
 ```bash
 # enter the configuration_examples directory and run
-docker compose -p jupyterlab-pioneer up --build
+docker compose -p jupyterlab_pioneer up --build
 ```
 
 A JupyterLab application with the extension installed and configured will run on localhost:8888.
@@ -23,7 +23,7 @@ A JupyterLab application with the extension installed and configured will run on
 To install the extension, execute:
 
 ```bash
-pip install jupyterlab-pioneer
+pip install jupyterlab_pioneer
 ```
 
 Before starting Jupyter Lab, users need to write their own configuration files (or use the provided configuration examples) and **place them in the correct directory**.
@@ -74,12 +74,12 @@ The extension will export the entire notebook content only for valid events with
 
 ```python
 {
-    'type': # one of 'console_exporter', 'command_line_exporter',
+    'type': # One of 'console_exporter', 'command_line_exporter',
             # 'file_exporter', 'remote_exporter',
             # or 'custom_exporter'.
-    'args': # arguments passed to the exporter function.
+    'args': # Optional. Arguments passed to the exporter function.
             # It needs to contain 'path' for file_exporter, 'url' for remote_exporter.
-    'activeEvents': # exporter's local active_events config will override global activeEvents config
+    'activeEvents': # Optional. Exporter's local activeEvents config will override global activeEvents config
 }
 ```
 
@@ -121,6 +121,12 @@ jupyter labextension list
 
 ### Development install
 
+#### (Optional) create conda environment from the provided `environment.yml` file
+```bash
+conda env create -f environment.yml
+```
+
+#### Clone and build the extension package
 Note: You will need NodeJS to build the extension package.
 
 The `jlpm` command is JupyterLab's pinned version of
@@ -129,7 +135,7 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the jupyterlab_pioneer directory
+# Change directory to the jupyterlab-pioneer directory
 # Install package in development mode
 pip install -e "."
 # Link your development version of the extension with JupyterLab
