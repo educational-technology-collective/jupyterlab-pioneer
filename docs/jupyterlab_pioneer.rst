@@ -9,7 +9,6 @@ jupyterlab\_pioneer.default_exporters module
    :undoc-members:
    :show-inheritance:
 
-
 jupyterlab\_pioneer.handlers module
 --------------------------------------------
 
@@ -17,8 +16,6 @@ jupyterlab\_pioneer.handlers module
    :members:
    :undoc-members:
    :show-inheritance:
-
-
 
 jupyterlab\_pioneer.application module
 --------------------------------------------

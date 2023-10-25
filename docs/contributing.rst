@@ -6,7 +6,9 @@ Development install
 
 **(Optional) create conda environment from the provided `environment.yml` file**
 ::
-        
+    
+    # Clone the repo to your local environment
+    # Change directory to the jupyterlab-pioneer directory   
     conda env create -f environment.yml
 
 **Clone and build the extension package**
@@ -17,7 +19,7 @@ The `jlpm` command is JupyterLab's pinned version of
 yarn that is installed with JupyterLab. You may use
 `yarn` or `npm` in lieu of `jlpm` below.
 ::
-        
+    
     # Clone the repo to your local environment
     # Change directory to the jupyterlab-pioneer directory
     # Install package in development mode
