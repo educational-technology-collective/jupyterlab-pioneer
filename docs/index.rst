@@ -3,19 +3,41 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to jupyterlab-pioneer's documentation!
+JupyterLab Pioneer
 ==============================================
 
+A JupyterLab extension for generating and exporting JupyterLab event telemetry data.
+
+Using this extension
+---------------------
+
+:doc:`get_started`
+   How to run the extension with docker, or install the extension and configure manually.
+
+:doc:`configurations`
+   How to write configuration file to add
+
+Development
+---------------------
+
+:doc:`contributing`
+   How to contribute to the extension
+
+
+.. Hidden TOCs
+
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
+   :numbered:
    :caption: Contents:
+   :hidden:
+
+   get_started
+   configurations
+   contributing
+
+.. toctree::
+   :caption: Reference:
+   :hidden:
 
    jupyterlab_pioneer
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

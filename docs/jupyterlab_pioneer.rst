@@ -1,7 +1,6 @@
 jupyterlab\_pioneer package
 ===========================
 
-
 jupyterlab\_pioneer.default_exporters module
 --------------------------------------------
 
