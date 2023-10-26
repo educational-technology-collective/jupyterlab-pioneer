@@ -79,7 +79,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
         const activeEvents: ActiveEvent[] = config.activeEvents;
         const exporters: Exporter[] =
           notebookPanel.content.model?.getMetadata('exporters') ||
-          config.exporters;
+          config.exporters; // The exporters configuration in the notebook metadata will override the configuration in the configuration file "jupyter_jupyterlab_pioneer_config.py"
 
         const processedExporters =
           activeEvents && activeEvents.length

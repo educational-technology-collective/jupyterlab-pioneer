@@ -122,11 +122,13 @@ jupyter labextension list
 ### Development install
 
 #### (Optional) create conda environment from the provided `environment.yml` file
+
 ```bash
 conda env create -f environment.yml
 ```
 
 #### Clone and build the extension package
+
 Note: You will need NodeJS to build the extension package.
 
 The `jlpm` command is JupyterLab's pinned version of
