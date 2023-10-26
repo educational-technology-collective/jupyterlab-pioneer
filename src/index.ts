@@ -79,7 +79,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
         const activeEvents: ActiveEvent[] = config.activeEvents;
         const exporters: Exporter[] =
           notebookPanel.content.model?.getMetadata('exporters') ||
-          config.exporters; // The exporters configuration in the notebook metadata will override the configuration in the configuration file "jupyter_jupyterlab_pioneer_config.py"
+          config.exporters; // The exporters configuration in the notebook metadata overrides the configuration in the configuration file "jupyter_jupyterlab_pioneer_config.py"
 
         const processedExporters =
           activeEvents && activeEvents.length
@@ -92,6 +92,8 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
                 }
               })
             : exporters.filter(e => e.activeEvents && e.activeEvents.length);
+        // Exporters without specifying the corresponding activeEvents will use the global activeEvents configuration.
+        // When the global activeEvents configuration is null, exporters that do not have corresponding activeEvents will be ignored.
         console.log(processedExporters);
 
         processedExporters.forEach(exporter => {

@@ -160,7 +160,7 @@ async def remote_exporter(args: dict) -> dict:
     }
 
 
-default_exporters: dict[str, Callable[[dict], dict or Awaitable[dict]]] = {
+default_exporters: "dict[str, Callable[[dict], dict or Awaitable[dict]]]" = {
     "console_exporter": console_exporter,
     "command_line_exporter": command_line_exporter,
     "file_exporter": file_exporter,
