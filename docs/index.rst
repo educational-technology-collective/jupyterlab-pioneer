@@ -21,6 +21,9 @@ Development
 :doc:`architecture`
    Architecture diagram
 
+:doc:`custom_event`
+   How to implement a custom event extension
+
 :doc:`contributing`
    How to contribute to the extension
 
@@ -37,6 +40,7 @@ Development
    installation
    configuration
    architecture
+   custom_event
    contributing
 
 .. toctree::
