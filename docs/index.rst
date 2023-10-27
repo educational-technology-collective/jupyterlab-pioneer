@@ -18,6 +18,9 @@ Using this extension
 Development
 ---------------------
 
+:doc:`architecture`
+   Architecture diagram
+
 :doc:`contributing`
    How to contribute to the extension
 
@@ -33,6 +36,7 @@ Development
    quick_start
    installation
    configuration
+   architecture
    contributing
 
 .. toctree::
