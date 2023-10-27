@@ -40,10 +40,10 @@ export class ActiveCellChangeEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
+            exporter,
             exporter.activeEvents?.find(
               o => o.name == ActiveCellChangeEventProducer.id
-            )?.logWholeNotebook,
-            exporter
+            )?.logWholeNotebook
           );
         }
       }
@@ -76,9 +76,9 @@ export class CellAddEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
+            exporter,
             exporter.activeEvents?.find(o => o.name == CellAddEventProducer.id)
-              ?.logWholeNotebook,
-            exporter
+              ?.logWholeNotebook
           );
         }
       }
@@ -111,9 +111,9 @@ export class CellEditEventProducer {
       await pioneer.publishEvent(
         notebookPanel,
         event,
+        exporter,
         exporter.activeEvents?.find(o => o.name == CellEditEventProducer.id)
-          ?.logWholeNotebook,
-        exporter
+          ?.logWholeNotebook
       );
     };
 
@@ -137,8 +137,8 @@ export class CellEditEventProducer {
             await pioneer.publishEvent(
               notebookPanel,
               event,
-              false, // do not log whole notebook for doc changes
-              exporter
+              exporter,
+              false // do not log whole notebook for doc changes
             );
           }
         })
@@ -196,10 +196,10 @@ export class CellExecuteEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
+            exporter,
             exporter.activeEvents?.find(
               o => o.name == CellExecuteEventProducer.id
-            )?.logWholeNotebook,
-            exporter
+            )?.logWholeNotebook
           );
         }
       }
@@ -232,10 +232,10 @@ export class CellRemoveEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
+            exporter,
             exporter.activeEvents?.find(
               o => o.name == CellRemoveEventProducer.id
-            )?.logWholeNotebook,
-            exporter
+            )?.logWholeNotebook
           );
         }
       }
@@ -270,10 +270,10 @@ export class ClipboardCopyEventProducer {
       await pioneer.publishEvent(
         notebookPanel,
         event,
+        exporter,
         exporter.activeEvents?.find(
           o => o.name == ClipboardCopyEventProducer.id
-        )?.logWholeNotebook,
-        exporter
+        )?.logWholeNotebook
       );
     });
   }
@@ -306,9 +306,9 @@ export class ClipboardCutEventProducer {
       await pioneer.publishEvent(
         notebookPanel,
         event,
+        exporter,
         exporter.activeEvents?.find(o => o.name == ClipboardCutEventProducer.id)
-          ?.logWholeNotebook,
-        exporter
+          ?.logWholeNotebook
       );
     });
   }
@@ -343,10 +343,10 @@ export class ClipboardPasteEventProducer {
       await pioneer.publishEvent(
         notebookPanel,
         event,
+        exporter,
         exporter.activeEvents?.find(
           o => o.name == ClipboardPasteEventProducer.id
-        )?.logWholeNotebook,
-        exporter
+        )?.logWholeNotebook
       );
     });
   }
@@ -373,10 +373,10 @@ export class NotebookHiddenEventProducer {
         await pioneer.publishEvent(
           notebookPanel,
           event,
+          exporter,
           exporter.activeEvents?.find(
             o => o.name == NotebookHiddenEventProducer.id
-          )?.logWholeNotebook,
-          exporter
+          )?.logWholeNotebook
         );
       }
     });
@@ -403,9 +403,9 @@ export class NotebookOpenEventProducer {
       await pioneer.publishEvent(
         notebookPanel,
         event,
+        exporter,
         exporter.activeEvents?.find(o => o.name == NotebookOpenEventProducer.id)
-          ?.logWholeNotebook,
-        exporter
+          ?.logWholeNotebook
       );
       this.produced = true;
     }
@@ -431,10 +431,10 @@ export class NotebookSaveEventProducer {
           await pioneer.publishEvent(
             notebookPanel,
             event,
+            exporter,
             exporter.activeEvents?.find(
               o => o.name == NotebookSaveEventProducer.id
-            )?.logWholeNotebook,
-            exporter
+            )?.logWholeNotebook
           );
         }
       }
@@ -491,9 +491,9 @@ export class NotebookScrollProducer {
       await pioneer.publishEvent(
         notebookPanel,
         event,
+        exporter,
         exporter.activeEvents?.find(o => o.name == NotebookScrollProducer.id)
-          ?.logWholeNotebook,
-        exporter
+          ?.logWholeNotebook
       );
     });
   }
@@ -522,10 +522,10 @@ export class NotebookVisibleEventProducer {
         await pioneer.publishEvent(
           notebookPanel,
           event,
+          exporter,
           exporter.activeEvents?.find(
             o => o.name == NotebookVisibleEventProducer.id
-          )?.logWholeNotebook,
-          exporter
+          )?.logWholeNotebook
         );
       }
     });

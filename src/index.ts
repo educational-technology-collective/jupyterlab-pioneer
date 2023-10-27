@@ -18,14 +18,15 @@ export interface IJupyterLabPioneer {
    * Send event data to exporters defined in the configuration file.
    *
    * @param {NotebookPanel} notebookPanel The notebook panel the extension currently listens to.
-   * @param {Object} eventDetail An object containing event details
-   * @param {Boolean} logNotebookContent A boolean indicating whether to log the entire notebook or not
+   * @param {Object} eventDetail An object containing event details.
+   * @param {Exporter} exporter The exporter configuration.
+   * @param {Boolean=} logWholeNotebook A boolean indicating whether to log the entire notebook or not.
    */
   publishEvent(
     notebookPanel: NotebookPanel,
     eventDetail: Object,
-    logWholeNotebook?: Boolean,
-    exporter?: Exporter
+    exporter: Exporter,
+    logWholeNotebook?: Boolean
   ): Promise<void>;
 }
 
@@ -33,8 +34,8 @@ class JupyterLabPioneer implements IJupyterLabPioneer {
   async publishEvent(
     notebookPanel: NotebookPanel,
     eventDetail: Object,
-    logWholeNotebook?: Boolean,
-    exporter?: Exporter
+    exporter: Exporter,
+    logWholeNotebook?: Boolean
   ) {
     if (!notebookPanel) {
       throw Error('router is listening to a null notebook panel');
