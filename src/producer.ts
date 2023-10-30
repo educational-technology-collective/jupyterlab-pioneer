@@ -466,7 +466,7 @@ const getVisibleCells = (notebookPanel: NotebookPanel) => {
   return visibleCells;
 };
 
-export class NotebookScrollProducer {
+export class NotebookScrollEventProducer {
   static id: string = 'NotebookScrollEvent';
   private timeout = 0;
 
@@ -482,7 +482,7 @@ export class NotebookScrollProducer {
         resolve => (this.timeout = window.setTimeout(resolve, 1500))
       ); // wait 1.5 seconds before preceding
       const event = {
-        eventName: NotebookScrollProducer.id,
+        eventName: NotebookScrollEventProducer.id,
         eventTime: Date.now(),
         eventInfo: {
           cells: getVisibleCells(notebookPanel)
@@ -492,7 +492,7 @@ export class NotebookScrollProducer {
         notebookPanel,
         event,
         exporter,
-        exporter.activeEvents?.find(o => o.name == NotebookScrollProducer.id)
+        exporter.activeEvents?.find(o => o.name == NotebookScrollEventProducer.id)
           ?.logWholeNotebook
       );
     });
@@ -544,6 +544,6 @@ export const producerCollection = [
   NotebookHiddenEventProducer,
   NotebookOpenEventProducer,
   NotebookSaveEventProducer,
-  NotebookScrollProducer,
+  NotebookScrollEventProducer,
   NotebookVisibleEventProducer
 ];

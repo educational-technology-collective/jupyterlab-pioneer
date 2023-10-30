@@ -32,7 +32,7 @@ Add ``jupyterlab-pioneer`` as a dependency in ``pyproject.toml`` and ``package.j
         "jupyterlab-pioneer"
     ]
 
-.. code-block:: json
+.. code-block::
 
     "jupyterlab": {
         ...
@@ -125,7 +125,7 @@ https://github.com/educational-technology-collective/jupyterlab-pioneer
 
 
 How to utilize the ``jupyter-pioneer`` extension to export telemetry data
-==========================================================================
+--------------------------------------------------------------------------
 
 The ``jupyter-pioneer`` extension helps to monitor notebook states and export telemetry data. It also provides a basic JupyterLab events library.
 
@@ -137,13 +137,11 @@ There is generally no limitation on the structure of the `eventDetail` object, a
 
 When `publishEvent` is called, the extension inserts the notebook session ID, notebook file path, and the notebook content (when `logWholeNotebook` is `true`) into the data. Then, it checks the exporter info, processes and sends out the data to the specified exporter. If `env` and `params` are provided in the configuration file when defining the desired exporter, the router would extract the environment variables and add the params to the exported data. Finally, the router will assemble the responses from the exporters in an array and print the response array in the console.
 
-(Optional) Event Producer
--------------------------
+**(Optional) Event Producer**
 
 There is no specific restrictions on when and where the telemetry router should be invoked. However, when writing complex event producer libraries, we recommend developers write an event producer class for each event, implement a `listen()` class method, and call the producer's `listen()` method when the producer extension is being activated. Within the `listen()` method, you may write the logic of how the extension listens to Jupyter signals or DOM events and how to use the `pioneer.publishEvent()` function to export telemetry data.
 
-(Optional) Producer Configuration
----------------------------------
+**(Optional) Producer Configuration**
 
 Writing code on top of the configuration file might be very useful when the event library is complex, and when the telemetry system is going to be deployed under different contexts with different needs of telemetry events.
 
