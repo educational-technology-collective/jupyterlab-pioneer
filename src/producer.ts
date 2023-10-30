@@ -219,8 +219,7 @@ export class CellRemoveEventProducer {
       async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
         if (args.type === 'remove') {
           const removedCell = {
-            newIndex: args.newIndex,
-            oldIndex: args.oldIndex
+            index: args.oldIndex
           };
           const event = {
             eventName: CellRemoveEventProducer.id,
