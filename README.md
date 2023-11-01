@@ -40,10 +40,10 @@ To add a data exporter, users should assign a callable function along with funct
 
 This extension provides 4 default exporters.
 
-- [`console_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L9), which sends telemetry data to the browser console
-- [`command_line_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L32), which sends telemetry data to the python console jupyter is running on
-- [`file_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L57), which saves telemetry data to local file
-- [`remote_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L85), which sends telemetry data to a remote http endpoint
+- [`console_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L22), which sends telemetry data to the browser console
+- [`command_line_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L48), which sends telemetry data to the python console jupyter is running on
+- [`file_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L76), which saves telemetry data to local file
+- [`remote_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L106), which sends telemetry data to a remote http endpoint
 
 Additionally, users can write customized exporters in the configuration file.
 
@@ -66,9 +66,8 @@ Check jupyter server [doc](https://jupyter-server.readthedocs.io/en/latest/opera
 }
 ```
 
-The extension would only generate and export data for valid events ( 1. that have an id associated with the event class, 2. and the event name is included in `activeEvents`
-).
-The extension will export the entire notebook content only for valid events with the `logWholeNotebook` flag == True.
+The extension would only generate and export data for valid event that has an id associated with the event class, and the event name is included in `activeEvents`.
+The extension will export the entire notebook content only for valid events when the `logWholeNotebook` flag is True.
 
 `exporters`: An array of exporters. Each exporter in the array should have the following structure:
 
