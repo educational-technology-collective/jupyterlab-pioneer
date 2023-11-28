@@ -41,7 +41,6 @@ def console_exporter(args: dict) -> dict:
                 }
 
     """
-
     return {"exporter": args.get("id") or "ConsoleExporter", "message": args["data"]}
 
 
@@ -66,8 +65,6 @@ def command_line_exporter(args: dict) -> dict:
                 }
     
     """
-
-    print(args["data"])
     return {
         "exporter": args.get("id") or "CommandLineExporter",
     }
@@ -160,9 +157,27 @@ async def remote_exporter(args: dict) -> dict:
     }
 
 
+def opentelemetry_exporter(args: dict) -> None:
+    """This exporter sends telemetry data via otlp
+
+    """
+    from opentelemetry import trace
+
+    current_span = trace.get_current_span()
+    event_detail = args['data']['eventDetail']
+    notebook_state = args['data']['notebookState']
+    attributes = {
+        "notebookSessionId": notebook_state['sessionID'],
+        'notebookPath': notebook_state['notebookPath'],
+        "event": event_detail['eventName']
+    }
+    current_span.add_event(event_detail['eventName'], attributes=attributes)
+
+
 default_exporters: "dict[str, Callable[[dict], dict or Awaitable[dict]]]" = {
     "console_exporter": console_exporter,
     "command_line_exporter": command_line_exporter,
     "file_exporter": file_exporter,
     "remote_exporter": remote_exporter,
+    "opentelementry_exporter": opentelemetry_exporter,
 }
