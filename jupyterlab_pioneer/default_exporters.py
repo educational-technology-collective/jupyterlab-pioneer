@@ -41,6 +41,7 @@ def console_exporter(args: dict) -> dict:
                 }
 
     """
+
     return {"exporter": args.get("id") or "ConsoleExporter", "message": args["data"]}
 
 
@@ -65,6 +66,8 @@ def command_line_exporter(args: dict) -> dict:
                 }
     
     """
+
+    print(args["data"])
     return {
         "exporter": args.get("id") or "CommandLineExporter",
     }
