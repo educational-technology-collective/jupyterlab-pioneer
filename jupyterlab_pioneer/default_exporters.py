@@ -1,4 +1,4 @@
-"""This module provides 4 default exporters for the extension. If the exporter function name is mentioned in the configuration file or in the notebook metadata, the extension will use the corresponding exporter function when the jupyter lab event is fired.
+"""This module provides 5 default exporters for the extension. If the exporter function name is mentioned in the configuration file or in the notebook metadata, the extension will use the corresponding exporter function when the jupyter lab event is fired.
 
 Attributes:
     default_exporters: a map from function names to callable exporter functions::
@@ -8,6 +8,7 @@ Attributes:
             "command_line_exporter": command_line_exporter,
             "file_exporter": file_exporter,
             "remote_exporter": remote_exporter,
+            "opentelemetry_exporter": opentelemetry_exporter,
         }
 """
 
@@ -159,10 +160,30 @@ async def remote_exporter(args: dict) -> dict:
         },
     }
 
+def opentelemetry_exporter(args: dict) -> dict:
+    """This exporter sends telemetry data via otlp
+
+    """
+    from opentelemetry import trace
+
+    current_span = trace.get_current_span()
+    event_detail = args['data']['eventDetail']
+    notebook_state = args['data']['notebookState']
+    attributes = {
+        "notebookSessionId": notebook_state['sessionID'],
+        'notebookPath': notebook_state['notebookPath'],
+        "event": event_detail['eventName']
+    }
+    current_span.add_event(event_detail['eventName'], attributes=attributes)
+
+    return {
+        "exporter": args.get("id") or "OpenTelemetryExporter",
+    }
 
 default_exporters: "dict[str, Callable[[dict], dict or Awaitable[dict]]]" = {
     "console_exporter": console_exporter,
     "command_line_exporter": command_line_exporter,
     "file_exporter": file_exporter,
     "remote_exporter": remote_exporter,
+    "opentelementry_exporter": opentelemetry_exporter,
 }

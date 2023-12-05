@@ -6,7 +6,7 @@ Overview
 
 The configuration file controls the activated events and data exporters.
 
-This extension provides 4 default exporters in the :mod:`.default_exporters` module:
+This extension provides 5 default exporters in the :mod:`.default_exporters` module:
 
 1. :func:`.default_exporters.console_exporter`, which sends telemetry data to the browser console.
 
@@ -15,6 +15,8 @@ This extension provides 4 default exporters in the :mod:`.default_exporters` mod
 3. :func:`.default_exporters.file_exporter`, which saves telemetry data to local file.
 
 4. :func:`.default_exporters.remote_exporter`, which sends telemetry data to a remote http endpoint.
+
+5. :func:`.default_exporters.opentelemetry_exporter`, which sends telemetry data via otlp.
 
 Default exporters will be activated if the exporter name is included by the configuration file.
 
