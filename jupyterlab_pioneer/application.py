@@ -46,7 +46,7 @@ class JupyterLabPioneerApp(ExtensionApp):
     exporters = List([]).tag(config=True)
     """ An array of the exporters defined in the configuration file.
 
-    This extension provides 4 default exporters in the :mod:`.default_exporters` module:
+    This extension provides 5 default exporters in the :mod:`.default_exporters` module:
 
     :func:`.default_exporters.console_exporter`, which sends telemetry data to the browser console.
 
@@ -55,6 +55,8 @@ class JupyterLabPioneerApp(ExtensionApp):
     :func:`.default_exporters.file_exporter`, which saves telemetry data to local file.
 
     :func:`.default_exporters.remote_exporter`, which sends telemetry data to a remote http endpoint.
+
+    :func:`.default_exporters.opentelemetry_exporter`, which sends telemetry data via otlp.
 
     Additionally, users can import default exporters or write customized exporters in the configuration file.
 

@@ -38,12 +38,13 @@ The configuration file controls the activated events and data exporters.
 
 To add a data exporter, users should assign a callable function along with function arguments when configuring `exporters`.
 
-This extension provides 4 default exporters.
+This extension provides 5 default exporters.
 
 - [`console_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L22), which sends telemetry data to the browser console
 - [`command_line_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L48), which sends telemetry data to the python console jupyter is running on
 - [`file_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L76), which saves telemetry data to local file
 - [`remote_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L106), which sends telemetry data to a remote http endpoint
+- [`opentelemetry_exporter`](https://github.com/educational-technology-collective/jupyterlab-pioneer/blob/main/jupyterlab_pioneer/default_exporters.py#L162), which sends telemetry data via otlp.
 
 Additionally, users can write customized exporters in the configuration file.
 

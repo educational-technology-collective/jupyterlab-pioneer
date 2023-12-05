@@ -33,7 +33,7 @@ export interface ExporterArgs {
 
 export interface Exporter {
   /**
-   * Exporter type, should be one of "console_exporter", "command_line_exporter", "file_exporter", "remote_exporter" or "custom_exporter"
+   * Exporter type, should be one of "console_exporter", "command_line_exporter", "file_exporter", "remote_exporter", "opentelemetry_exporter" or "custom_exporter"
    */
   type: string;
   /**

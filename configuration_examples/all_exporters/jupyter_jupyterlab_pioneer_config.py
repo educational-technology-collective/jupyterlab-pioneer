@@ -2,11 +2,12 @@
 
 """An array of the exporters.
 
-This extension provides 4 default exporters:
+This extension provides 5 default exporters:
 `console_exporter`, which sends telemetry data to the browser console.
 `command_line_exporter`, which sends telemetry data to the python console jupyter is running on.
 `file_exporter`, which saves telemetry data to local file.
 `remote_exporter`, which sends telemetry data to a remote http endpoint.
+`opentelemetry_exporter`, which sends telemetry data via otlp.
 
 Additionally, users can import default exporters or write customized exporters in the configuration file.
 """
