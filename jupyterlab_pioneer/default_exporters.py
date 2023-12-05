@@ -185,5 +185,5 @@ default_exporters: "dict[str, Callable[[dict], dict or Awaitable[dict]]]" = {
     "command_line_exporter": command_line_exporter,
     "file_exporter": file_exporter,
     "remote_exporter": remote_exporter,
-    "opentelementry_exporter": opentelemetry_exporter,
+    "opentelemetry_exporter": opentelemetry_exporter,
 }
