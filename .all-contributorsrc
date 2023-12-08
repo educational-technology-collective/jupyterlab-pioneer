@@ -21,6 +21,17 @@
         "test",
         "doc"
       ]
+    },
+    {
+      "login": "soney",
+      "name": "Steve Oney",
+      "avatar_url": "https://avatars.githubusercontent.com/u/211262?v=4",
+      "profile": "http://from.so/Steve_Oney",
+      "contributions": [
+        "ideas",
+        "projectManagement",
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7,
