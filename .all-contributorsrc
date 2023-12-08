@@ -53,6 +53,15 @@
         "ideas",
         "code"
       ]
+    },
+    {
+      "login": "aktech",
+      "name": "Amit Kumar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5647941?v=4",
+      "profile": "https://iamit.in",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7,
