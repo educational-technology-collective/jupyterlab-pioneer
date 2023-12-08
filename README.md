@@ -1,6 +1,6 @@
 # JupyterLab Pioneer
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![PyPI](https://img.shields.io/pypi/v/jupyterlab-pioneer.svg)](https://pypi.org/project/jupyterlab-pioneer)
@@ -196,6 +196,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.wumengyan.com/"><img src="https://avatars.githubusercontent.com/u/85606983?v=4?s=100" width="100px;" alt="mengyanw"/><br /><sub><b>mengyanw</b></sub></a><br /><a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=mengyanw" title="Code">💻</a> <a href="#ideas-mengyanw" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-mengyanw" title="Maintenance">🚧</a> <a href="#projectManagement-mengyanw" title="Project Management">📆</a> <a href="#infra-mengyanw" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=mengyanw" title="Tests">⚠️</a> <a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=mengyanw" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://christopherbrooks.ca"><img src="https://avatars.githubusercontent.com/u/1355641?v=4?s=100" width="100px;" alt="Christopher Brooks"/><br /><sub><b>Christopher Brooks</b></sub></a><br /><a href="#ideas-cab938" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-cab938" title="Project Management">📆</a> <a href="#infra-cab938" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://from.so/Steve_Oney"><img src="https://avatars.githubusercontent.com/u/211262?v=4?s=100" width="100px;" alt="Steve Oney"/><br /><sub><b>Steve Oney</b></sub></a><br /><a href="#ideas-soney" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-soney" title="Project Management">📆</a> <a href="#infra-soney" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
     </tr>
   </tbody>
 </table>
