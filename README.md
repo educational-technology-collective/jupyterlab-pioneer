@@ -1,4 +1,7 @@
 # JupyterLab Pioneer
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![PyPI](https://img.shields.io/pypi/v/jupyterlab-pioneer.svg)](https://pypi.org/project/jupyterlab-pioneer)
 [![npm](https://img.shields.io/npm/v/jupyterlab-pioneer.svg)](https://www.npmjs.com/package/jupyterlab-pioneer)
@@ -180,3 +183,25 @@ folder is located. Then you can remove the symlink named `jupyterlab-pioneer` wi
 ### Packaging the extension
 
 See [RELEASE](RELEASE.md)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.wumengyan.com/"><img src="https://avatars.githubusercontent.com/u/85606983?v=4?s=100" width="100px;" alt="mengyanw"/><br /><sub><b>mengyanw</b></sub></a><br /><a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=mengyanw" title="Code">💻</a> <a href="#ideas-mengyanw" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-mengyanw" title="Maintenance">🚧</a> <a href="#projectManagement-mengyanw" title="Project Management">📆</a> <a href="#infra-mengyanw" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=mengyanw" title="Tests">⚠️</a> <a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=mengyanw" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
