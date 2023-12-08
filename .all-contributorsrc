@@ -43,6 +43,16 @@
         "projectManagement",
         "infra"
       ]
+    },
+    {
+      "login": "costrouc",
+      "name": "Christopher Ostrouchov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1740337?v=4",
+      "profile": "https://www.chrisostrouchov.com",
+      "contributions": [
+        "ideas",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
