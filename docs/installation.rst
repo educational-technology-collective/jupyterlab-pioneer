@@ -4,7 +4,7 @@ Installation
 Install
 --------
 
-To install the extension, execute:
+To install the extension, execute::
 
 Using pip::
 
@@ -13,7 +13,6 @@ Using pip::
 Using conda (via conda-forge)::
 
     conda install -c conda-forge jupyterlab-pioneer
-
 
 Before starting Jupyter Lab, users need to write their own configuration files (or use the `provided configuration examples <https://github.com/educational-technology-collective/jupyterlab-pioneer/tree/main/configuration_examples>`_) and place them in the `correct directory`_.
 
@@ -25,17 +24,15 @@ Documentation on how to write configuration files is here_.
 Uninstall
 ---------
 
-To remove the extension, execute:
+To remove the extension, execute::
 
 Using pip::
 
     pip uninstall jupyterlab_pioneer
 
-Using conda (via conda-forge)::
+Using conda::
 
    conda uninstall jupyterlab-pioneer
-
-
 
 Troubleshoot
 ------------
