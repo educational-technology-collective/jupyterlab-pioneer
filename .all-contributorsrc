@@ -1,7 +1,5 @@
 {
-  "files": [
-    "README.md"
-  ],
+  "files": ["README.md"],
   "imageSize": 100,
   "commit": false,
   "commitType": "docs",
@@ -27,40 +25,28 @@
       "name": "Christopher Brooks",
       "avatar_url": "https://avatars.githubusercontent.com/u/1355641?v=4",
       "profile": "http://christopherbrooks.ca",
-      "contributions": [
-        "ideas",
-        "projectManagement",
-        "infra"
-      ]
+      "contributions": ["ideas", "projectManagement", "infra"]
     },
     {
       "login": "soney",
       "name": "Steve Oney",
       "avatar_url": "https://avatars.githubusercontent.com/u/211262?v=4",
       "profile": "http://from.so/Steve_Oney",
-      "contributions": [
-        "ideas",
-        "projectManagement"
-      ]
+      "contributions": ["ideas", "projectManagement"]
     },
     {
       "login": "costrouc",
       "name": "Christopher Ostrouchov",
       "avatar_url": "https://avatars.githubusercontent.com/u/1740337?v=4",
       "profile": "https://www.chrisostrouchov.com",
-      "contributions": [
-        "ideas",
-        "code"
-      ]
+      "contributions": ["ideas", "code"]
     },
     {
       "login": "aktech",
       "name": "Amit Kumar",
       "avatar_url": "https://avatars.githubusercontent.com/u/5647941?v=4",
       "profile": "https://iamit.in",
-      "contributions": [
-        "infra"
-      ]
+      "contributions": ["infra"]
     }
   ],
   "contributorsPerLine": 7,

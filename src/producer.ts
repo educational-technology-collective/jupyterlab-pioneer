@@ -491,8 +491,9 @@ export class NotebookScrollEventProducer {
         notebookPanel,
         event,
         exporter,
-        exporter.activeEvents?.find(o => o.name == NotebookScrollEventProducer.id)
-          ?.logWholeNotebook
+        exporter.activeEvents?.find(
+          o => o.name == NotebookScrollEventProducer.id
+        )?.logWholeNotebook
       );
     });
   }
