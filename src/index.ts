@@ -9,7 +9,7 @@ import { Token } from '@lumino/coreutils';
 import { requestAPI } from './handler';
 import { producerCollection } from './producer';
 import { ActiveEvent, Config, Exporter } from './types';
-import { addExtensionInfoToHelpMenu } from './utils';
+import { sendInfoNotification, addInfoToHelpMenu } from './utils';
 
 const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 
@@ -78,7 +78,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
 
     const pioneer = new JupyterLabPioneer();
 
-    addExtensionInfoToHelpMenu(app, mainMenu, version);
+    addInfoToHelpMenu(app, mainMenu, version);
 
     notebookTracker.widgetAdded.connect(
       async (_, notebookPanel: NotebookPanel) => {
@@ -112,6 +112,8 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
             }
           });
         });
+
+        sendInfoNotification(processedExporters);
       }
     );
 

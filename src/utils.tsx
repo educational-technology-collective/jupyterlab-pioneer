@@ -1,9 +1,20 @@
 import * as React from 'react';
-import { Dialog, showDialog } from '@jupyterlab/apputils';
+import { Dialog, showDialog, Notification } from '@jupyterlab/apputils';
 import { JupyterFrontEnd } from '@jupyterlab/application';
 import { IMainMenu } from '@jupyterlab/mainmenu';
+import { Exporter } from './types';
 
-export const addExtensionInfoToHelpMenu = (
+export const sendInfoNotification = (processedExporters: Exporter[]) => {
+  const exporterMessage = processedExporters
+    .map(each => each.args?.id || each.type)
+    .join(' & ');
+  if (exporterMessage) {
+    const message = `Telemetry data is being logged to ${exporterMessage} through jupyterlab-pioneer. \n See Help menu -> JupyterLab Pioneer for more details.`;
+    Notification.info(message);
+  }
+};
+
+export const addInfoToHelpMenu = (
   app: JupyterFrontEnd,
   mainMenu: IMainMenu,
   version: string
