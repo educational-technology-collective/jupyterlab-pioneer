@@ -4,14 +4,22 @@ import { JupyterFrontEnd } from '@jupyterlab/application';
 import { IMainMenu } from '@jupyterlab/mainmenu';
 import { Exporter } from './types';
 
-export const sendInfoNotification = (processedExporters: Exporter[]) => {
-  const exporterMessage = processedExporters
+export const sendInfoNotification = (
+  exporters: Exporter[],
+  isGlobal: boolean
+) => {
+  const exporterMessage = exporters
     .map(each => each.args?.id || each.type)
     .join(' & ');
-  if (exporterMessage) {
-    const message = `Telemetry data is being logged to ${exporterMessage} through jupyterlab-pioneer. \n See Help menu -> JupyterLab Pioneer for more details.`;
-    Notification.info(message);
+  let message;
+  if (isGlobal && exporterMessage) {
+    message = `Telemetry data is being logged to ${exporterMessage} through jupyterlab-pioneer. \n See Help menu -> JupyterLab Pioneer for more details.`;
+  } else if (isGlobal && !exporterMessage) {
+    message = `Telemetry data is being logged through jupyterlab-pioneer. \n See Help menu -> JupyterLab Pioneer for more details.`;
+  } else {
+    message = `Embedded telemetry settings loaded. Telemetry data is being logged to ${exporterMessage} now.`;
   }
+  Notification.info(message);
 };
 
 export const addInfoToHelpMenu = (

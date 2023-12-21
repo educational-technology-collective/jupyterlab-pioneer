@@ -5,6 +5,7 @@ import {
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 import { INotebookContent } from '@jupyterlab/nbformat';
 import { IMainMenu } from '@jupyterlab/mainmenu';
+import { Notification } from '@jupyterlab/apputils';
 import { Token } from '@lumino/coreutils';
 import { requestAPI } from './handler';
 import { producerCollection } from './producer';
@@ -79,6 +80,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
     const pioneer = new JupyterLabPioneer();
 
     addInfoToHelpMenu(app, mainMenu, version);
+    sendInfoNotification(config.exporters, true);
 
     notebookTracker.widgetAdded.connect(
       async (_, notebookPanel: NotebookPanel) => {
@@ -113,7 +115,9 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
           });
         });
 
-        sendInfoNotification(processedExporters);
+        if (notebookPanel.content.model?.getMetadata('exporters')) {
+          sendInfoNotification(processedExporters, false);
+        }
       }
     );
 
