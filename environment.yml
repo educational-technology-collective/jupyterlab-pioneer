@@ -185,4 +185,4 @@ dependencies:
   - zlib=1.2.13=h53f4e23_5
   - zstd=1.5.5=h4f39d0f_0
   - pip:
-      - jupyterlab-pioneer==0.1.11
+      - jupyterlab-pioneer==0.2.0
