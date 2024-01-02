@@ -19,7 +19,7 @@ export const sendInfoNotification = (
   } else {
     message = `Embedded telemetry settings loaded. Telemetry data is being logged to ${exporterMessage} now.`;
   }
-  Notification.info(message);
+  Notification.info(message, { autoClose: 20000 });
 };
 
 export const addInfoToHelpMenu = (
