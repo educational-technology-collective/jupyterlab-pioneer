@@ -17,6 +17,11 @@ export const IJupyterLabPioneer = new Token<IJupyterLabPioneer>(PLUGIN_ID);
 
 export interface IJupyterLabPioneer {
   exporters: Exporter[];
+  
+  /**
+   * Load exporters defined in the configuration file.
+   */
+  loadExporters(notebookPanel: NotebookPanel): Promise<void>;
 
   /**
    * Send event data to exporters defined in the configuration file.
