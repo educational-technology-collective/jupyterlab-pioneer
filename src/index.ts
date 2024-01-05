@@ -5,7 +5,6 @@ import {
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 import { INotebookContent } from '@jupyterlab/nbformat';
 import { IMainMenu } from '@jupyterlab/mainmenu';
-import { Notification } from '@jupyterlab/apputils';
 import { Token } from '@lumino/coreutils';
 import { requestAPI } from './handler';
 import { producerCollection } from './producer';
@@ -17,13 +16,15 @@ const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 export const IJupyterLabPioneer = new Token<IJupyterLabPioneer>(PLUGIN_ID);
 
 export interface IJupyterLabPioneer {
+  exporters: Exporter[];
+
   /**
    * Send event data to exporters defined in the configuration file.
    *
    * @param {NotebookPanel} notebookPanel The notebook panel the extension currently listens to.
    * @param {Object} eventDetail An object containing event details.
    * @param {Exporter} exporter The exporter configuration.
-   * @param {Boolean=} logWholeNotebook A boolean indicating whether to log the entire notebook or not.
+   * @param {Boolean} logWholeNotebook A boolean indicating whether to log the entire notebook or not.
    */
   publishEvent(
     notebookPanel: NotebookPanel,
@@ -34,6 +35,36 @@ export interface IJupyterLabPioneer {
 }
 
 class JupyterLabPioneer implements IJupyterLabPioneer {
+  exporters: Exporter[];
+
+  constructor() {
+    this.exporters = [];
+  }
+
+  async loadExporters(notebookPanel: NotebookPanel) {
+    const config = (await requestAPI<any>('config')) as Config;
+    const activeEvents: ActiveEvent[] = config.activeEvents;
+    const exporters: Exporter[] =
+      notebookPanel.content.model?.getMetadata('exporters') || config.exporters; // The exporters configuration in the notebook metadata overrides the configuration in the configuration file "jupyter_jupyterlab_pioneer_config.py"
+
+    const processedExporters =
+      activeEvents && activeEvents.length
+        ? exporters.map(e => {
+            if (!e.activeEvents) {
+              e.activeEvents = activeEvents;
+              return e;
+            } else {
+              return e;
+            }
+          })
+        : exporters.filter(e => e.activeEvents && e.activeEvents.length);
+    // Exporters without specifying the corresponding activeEvents will use the global activeEvents configuration.
+    // When the global activeEvents configuration is null, exporters that do not have corresponding activeEvents will be ignored.
+    console.log(processedExporters);
+    this.exporters = processedExporters;
+    sendInfoNotification(processedExporters, true);
+  }
+
   async publishEvent(
     notebookPanel: NotebookPanel,
     eventDetail: Object,
@@ -75,49 +106,19 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
     const version = await requestAPI<string>('version');
     console.log(`${PLUGIN_ID}: ${version}`);
 
-    const config = (await requestAPI<any>('config')) as Config;
-
     const pioneer = new JupyterLabPioneer();
 
     addInfoToHelpMenu(app, mainMenu, version);
-    sendInfoNotification(config.exporters, true);
 
     notebookTracker.widgetAdded.connect(
       async (_, notebookPanel: NotebookPanel) => {
         await notebookPanel.revealed;
         await notebookPanel.sessionContext.ready;
+        await pioneer.loadExporters(notebookPanel);
 
-        const activeEvents: ActiveEvent[] = config.activeEvents;
-        const exporters: Exporter[] =
-          notebookPanel.content.model?.getMetadata('exporters') ||
-          config.exporters; // The exporters configuration in the notebook metadata overrides the configuration in the configuration file "jupyter_jupyterlab_pioneer_config.py"
-
-        const processedExporters =
-          activeEvents && activeEvents.length
-            ? exporters.map(e => {
-                if (!e.activeEvents) {
-                  e.activeEvents = activeEvents;
-                  return e;
-                } else {
-                  return e;
-                }
-              })
-            : exporters.filter(e => e.activeEvents && e.activeEvents.length);
-        // Exporters without specifying the corresponding activeEvents will use the global activeEvents configuration.
-        // When the global activeEvents configuration is null, exporters that do not have corresponding activeEvents will be ignored.
-        console.log(processedExporters);
-
-        processedExporters.forEach(exporter => {
-          producerCollection.forEach(producer => {
-            if (exporter.activeEvents?.map(o => o.name).includes(producer.id)) {
-              new producer().listen(notebookPanel, pioneer, exporter);
-            }
-          });
+        producerCollection.forEach(producer => {
+          new producer().listen(notebookPanel, pioneer);
         });
-
-        if (notebookPanel.content.model?.getMetadata('exporters')) {
-          sendInfoNotification(processedExporters, false);
-        }
       }
     );
 

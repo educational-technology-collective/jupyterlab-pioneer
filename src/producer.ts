@@ -11,16 +11,11 @@ import { CodeMirrorEditor } from '@jupyterlab/codemirror';
 import { EditorView, ViewUpdate } from '@codemirror/view';
 import { IJupyterLabPioneer } from './index';
 import { requestAPI } from './handler';
-import { Exporter } from './types';
 
 export class ActiveCellChangeEventProducer {
   static id: string = 'ActiveCellChangeEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     notebookPanel.content.activeCellChanged.connect(
       async (_, cell: Cell<ICellModel> | null) => {
         if (cell && notebookPanel.content.widgets) {
@@ -37,14 +32,22 @@ export class ActiveCellChangeEventProducer {
               cells: [activatedCell] // activated cell
             }
           };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            exporter,
-            exporter.activeEvents?.find(
-              o => o.name == ActiveCellChangeEventProducer.id
-            )?.logWholeNotebook
-          );
+          pioneer.exporters.forEach(async exporter => {
+            if (
+              exporter.activeEvents
+                ?.map(o => o.name)
+                .includes(ActiveCellChangeEventProducer.id)
+            ) {
+              await pioneer.publishEvent(
+                notebookPanel,
+                event,
+                exporter,
+                exporter.activeEvents?.find(
+                  o => o.name == ActiveCellChangeEventProducer.id
+                )?.logWholeNotebook
+              );
+            }
+          });
         }
       }
     );
@@ -54,11 +57,7 @@ export class ActiveCellChangeEventProducer {
 export class CellAddEventProducer {
   static id: string = 'CellAddEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     notebookPanel.content.model?.cells.changed.connect(
       async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
         if (args.type === 'add') {
@@ -73,13 +72,22 @@ export class CellAddEventProducer {
               cells: [addedCell]
             }
           };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            exporter,
-            exporter.activeEvents?.find(o => o.name == CellAddEventProducer.id)
-              ?.logWholeNotebook
-          );
+          pioneer.exporters.forEach(async exporter => {
+            if (
+              exporter.activeEvents
+                ?.map(o => o.name)
+                .includes(CellAddEventProducer.id)
+            ) {
+              await pioneer.publishEvent(
+                notebookPanel,
+                event,
+                exporter,
+                exporter.activeEvents?.find(
+                  o => o.name == CellAddEventProducer.id
+                )?.logWholeNotebook
+              );
+            }
+          });
         }
       }
     );
@@ -89,11 +97,7 @@ export class CellAddEventProducer {
 export class CellEditEventProducer {
   static id: string = 'CellEditEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     const sendDoc = async (_: Notebook, cell: Cell<ICellModel> | null) => {
       await cell?.ready; // wait until cell is ready, to prevent errors when creating new cells
       const editor = cell?.editor as CodeMirrorEditor;
@@ -108,13 +112,21 @@ export class CellEditEventProducer {
           doc: editor?.state?.doc?.toJSON() // send entire cell content if this is a new cell
         }
       };
-      await pioneer.publishEvent(
-        notebookPanel,
-        event,
-        exporter,
-        exporter.activeEvents?.find(o => o.name == CellEditEventProducer.id)
-          ?.logWholeNotebook
-      );
+      pioneer.exporters.forEach(async exporter => {
+        if (
+          exporter.activeEvents
+            ?.map(o => o.name)
+            .includes(CellEditEventProducer.id)
+        ) {
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            exporter,
+            exporter.activeEvents?.find(o => o.name == CellEditEventProducer.id)
+              ?.logWholeNotebook
+          );
+        }
+      });
     };
 
     const addDocChangeListener = async (cell: Cell<ICellModel> | null) => {
@@ -134,12 +146,20 @@ export class CellEditEventProducer {
                 changes: v.changes.toJSON() // send changes
               }
             };
-            await pioneer.publishEvent(
-              notebookPanel,
-              event,
-              exporter,
-              false // do not log whole notebook for doc changes
-            );
+            pioneer.exporters.forEach(async exporter => {
+              if (
+                exporter.activeEvents
+                  ?.map(o => o.name)
+                  .includes(CellEditEventProducer.id)
+              ) {
+                await pioneer.publishEvent(
+                  notebookPanel,
+                  event,
+                  exporter,
+                  false // do not log whole notebook for doc changes
+                );
+              }
+            });
           }
         })
       );
@@ -164,11 +184,7 @@ export class CellEditEventProducer {
 export class CellExecuteEventProducer {
   static id: string = 'CellExecuteEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     NotebookActions.executed.connect(
       async (
         _: any,
@@ -193,14 +209,22 @@ export class CellExecuteEventProducer {
               kernelError: args.success ? null : args.error
             }
           };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            exporter,
-            exporter.activeEvents?.find(
-              o => o.name == CellExecuteEventProducer.id
-            )?.logWholeNotebook
-          );
+          pioneer.exporters.forEach(async exporter => {
+            if (
+              exporter.activeEvents
+                ?.map(o => o.name)
+                .includes(CellExecuteEventProducer.id)
+            ) {
+              await pioneer.publishEvent(
+                notebookPanel,
+                event,
+                exporter,
+                exporter.activeEvents?.find(
+                  o => o.name == CellExecuteEventProducer.id
+                )?.logWholeNotebook
+              );
+            }
+          });
         }
       }
     );
@@ -210,11 +234,7 @@ export class CellExecuteEventProducer {
 export class CellRemoveEventProducer {
   static id: string = 'CellRemoveEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     notebookPanel.content.model?.cells.changed.connect(
       async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
         if (args.type === 'remove') {
@@ -228,14 +248,22 @@ export class CellRemoveEventProducer {
               cells: [removedCell]
             }
           };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            exporter,
-            exporter.activeEvents?.find(
-              o => o.name == CellRemoveEventProducer.id
-            )?.logWholeNotebook
-          );
+          pioneer.exporters.forEach(async exporter => {
+            if (
+              exporter.activeEvents
+                ?.map(o => o.name)
+                .includes(CellRemoveEventProducer.id)
+            ) {
+              await pioneer.publishEvent(
+                notebookPanel,
+                event,
+                exporter,
+                exporter.activeEvents?.find(
+                  o => o.name == CellRemoveEventProducer.id
+                )?.logWholeNotebook
+              );
+            }
+          });
         }
       }
     );
@@ -245,11 +273,7 @@ export class CellRemoveEventProducer {
 export class ClipboardCopyEventProducer {
   static id: string = 'ClipboardCopyEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     notebookPanel.node.addEventListener('copy', async () => {
       const cell = {
         id: notebookPanel.content.activeCell?.model.id,
@@ -266,14 +290,22 @@ export class ClipboardCopyEventProducer {
           selection: text
         }
       };
-      await pioneer.publishEvent(
-        notebookPanel,
-        event,
-        exporter,
-        exporter.activeEvents?.find(
-          o => o.name == ClipboardCopyEventProducer.id
-        )?.logWholeNotebook
-      );
+      pioneer.exporters.forEach(async exporter => {
+        if (
+          exporter.activeEvents
+            ?.map(o => o.name)
+            .includes(CellRemoveEventProducer.id)
+        ) {
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            exporter,
+            exporter.activeEvents?.find(
+              o => o.name == ClipboardCopyEventProducer.id
+            )?.logWholeNotebook
+          );
+        }
+      });
     });
   }
 }
@@ -281,11 +313,7 @@ export class ClipboardCopyEventProducer {
 export class ClipboardCutEventProducer {
   static id: string = 'ClipboardCutEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     notebookPanel.node.addEventListener('cut', async () => {
       const cell = {
         id: notebookPanel.content.activeCell?.model.id,
@@ -302,13 +330,22 @@ export class ClipboardCutEventProducer {
           selection: text
         }
       };
-      await pioneer.publishEvent(
-        notebookPanel,
-        event,
-        exporter,
-        exporter.activeEvents?.find(o => o.name == ClipboardCutEventProducer.id)
-          ?.logWholeNotebook
-      );
+      pioneer.exporters.forEach(async exporter => {
+        if (
+          exporter.activeEvents
+            ?.map(o => o.name)
+            .includes(CellRemoveEventProducer.id)
+        ) {
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            exporter,
+            exporter.activeEvents?.find(
+              o => o.name == ClipboardCutEventProducer.id
+            )?.logWholeNotebook
+          );
+        }
+      });
     });
   }
 }
@@ -316,11 +353,7 @@ export class ClipboardCutEventProducer {
 export class ClipboardPasteEventProducer {
   static id: string = 'ClipboardPasteEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     notebookPanel.node.addEventListener('paste', async (e: ClipboardEvent) => {
       const cell = {
         id: notebookPanel.content.activeCell?.model.id,
@@ -339,14 +372,22 @@ export class ClipboardPasteEventProducer {
           selection: text
         }
       };
-      await pioneer.publishEvent(
-        notebookPanel,
-        event,
-        exporter,
-        exporter.activeEvents?.find(
-          o => o.name == ClipboardPasteEventProducer.id
-        )?.logWholeNotebook
-      );
+      pioneer.exporters.forEach(async exporter => {
+        if (
+          exporter.activeEvents
+            ?.map(o => o.name)
+            .includes(CellRemoveEventProducer.id)
+        ) {
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            exporter,
+            exporter.activeEvents?.find(
+              o => o.name == ClipboardPasteEventProducer.id
+            )?.logWholeNotebook
+          );
+        }
+      });
     });
   }
 }
@@ -354,11 +395,7 @@ export class ClipboardPasteEventProducer {
 export class NotebookHiddenEventProducer {
   static id: string = 'NotebookHiddenEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     document.addEventListener('visibilitychange', async (e: Event) => {
       if (
         document.visibilityState === 'hidden' &&
@@ -369,14 +406,22 @@ export class NotebookHiddenEventProducer {
           eventTime: Date.now(),
           eventInfo: null
         };
-        await pioneer.publishEvent(
-          notebookPanel,
-          event,
-          exporter,
-          exporter.activeEvents?.find(
-            o => o.name == NotebookHiddenEventProducer.id
-          )?.logWholeNotebook
-        );
+        pioneer.exporters.forEach(async exporter => {
+          if (
+            exporter.activeEvents
+              ?.map(o => o.name)
+              .includes(CellRemoveEventProducer.id)
+          ) {
+            await pioneer.publishEvent(
+              notebookPanel,
+              event,
+              exporter,
+              exporter.activeEvents?.find(
+                o => o.name == NotebookHiddenEventProducer.id
+              )?.logWholeNotebook
+            );
+          }
+        });
       }
     });
   }
@@ -386,11 +431,7 @@ export class NotebookOpenEventProducer {
   static id: string = 'NotebookOpenEvent';
   private produced: boolean = false;
 
-  async listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  async listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     if (!this.produced) {
       const event = {
         eventName: NotebookOpenEventProducer.id,
@@ -399,14 +440,23 @@ export class NotebookOpenEventProducer {
           environ: await requestAPI<any>('environ')
         }
       };
-      await pioneer.publishEvent(
-        notebookPanel,
-        event,
-        exporter,
-        exporter.activeEvents?.find(o => o.name == NotebookOpenEventProducer.id)
-          ?.logWholeNotebook
-      );
-      this.produced = true;
+      pioneer.exporters.forEach(async exporter => {
+        if (
+          exporter.activeEvents
+            ?.map(o => o.name)
+            .includes(CellRemoveEventProducer.id)
+        ) {
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            exporter,
+            exporter.activeEvents?.find(
+              o => o.name == NotebookOpenEventProducer.id
+            )?.logWholeNotebook
+          );
+          this.produced = true;
+        }
+      });
     }
   }
 }
@@ -414,11 +464,7 @@ export class NotebookOpenEventProducer {
 export class NotebookSaveEventProducer {
   static id: string = 'NotebookSaveEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     notebookPanel.context.saveState.connect(
       async (_, saveState: DocumentRegistry.SaveState) => {
         if (saveState.match('completed')) {
@@ -427,14 +473,22 @@ export class NotebookSaveEventProducer {
             eventTime: Date.now(),
             eventInfo: null
           };
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            exporter,
-            exporter.activeEvents?.find(
-              o => o.name == NotebookSaveEventProducer.id
-            )?.logWholeNotebook
-          );
+          pioneer.exporters.forEach(async exporter => {
+            if (
+              exporter.activeEvents
+                ?.map(o => o.name)
+                .includes(CellRemoveEventProducer.id)
+            ) {
+              await pioneer.publishEvent(
+                notebookPanel,
+                event,
+                exporter,
+                exporter.activeEvents?.find(
+                  o => o.name == NotebookSaveEventProducer.id
+                )?.logWholeNotebook
+              );
+            }
+          });
         }
       }
     );
@@ -469,11 +523,7 @@ export class NotebookScrollEventProducer {
   static id: string = 'NotebookScrollEvent';
   private timeout = 0;
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     notebookPanel.content.node.addEventListener('scroll', async (e: Event) => {
       e.stopPropagation();
       clearTimeout(this.timeout);
@@ -487,14 +537,22 @@ export class NotebookScrollEventProducer {
           cells: getVisibleCells(notebookPanel)
         }
       };
-      await pioneer.publishEvent(
-        notebookPanel,
-        event,
-        exporter,
-        exporter.activeEvents?.find(
-          o => o.name == NotebookScrollEventProducer.id
-        )?.logWholeNotebook
-      );
+      pioneer.exporters.forEach(async exporter => {
+        if (
+          exporter.activeEvents
+            ?.map(o => o.name)
+            .includes(CellRemoveEventProducer.id)
+        ) {
+          await pioneer.publishEvent(
+            notebookPanel,
+            event,
+            exporter,
+            exporter.activeEvents?.find(
+              o => o.name == NotebookScrollEventProducer.id
+            )?.logWholeNotebook
+          );
+        }
+      });
     });
   }
 }
@@ -502,11 +560,7 @@ export class NotebookScrollEventProducer {
 export class NotebookVisibleEventProducer {
   static id: string = 'NotebookVisibleEvent';
 
-  listen(
-    notebookPanel: NotebookPanel,
-    pioneer: IJupyterLabPioneer,
-    exporter: Exporter
-  ) {
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
     document.addEventListener('visibilitychange', async () => {
       if (
         document.visibilityState === 'visible' &&
@@ -519,14 +573,22 @@ export class NotebookVisibleEventProducer {
             cells: getVisibleCells(notebookPanel)
           }
         };
-        await pioneer.publishEvent(
-          notebookPanel,
-          event,
-          exporter,
-          exporter.activeEvents?.find(
-            o => o.name == NotebookVisibleEventProducer.id
-          )?.logWholeNotebook
-        );
+        pioneer.exporters.forEach(async exporter => {
+          if (
+            exporter.activeEvents
+              ?.map(o => o.name)
+              .includes(NotebookVisibleEventProducer.id)
+          ) {
+            await pioneer.publishEvent(
+              notebookPanel,
+              event,
+              exporter,
+              exporter.activeEvents?.find(
+                o => o.name == NotebookVisibleEventProducer.id
+              )?.logWholeNotebook
+            );
+          }
+        });
       }
     });
   }
