@@ -17,7 +17,7 @@ export const IJupyterLabPioneer = new Token<IJupyterLabPioneer>(PLUGIN_ID);
 
 export interface IJupyterLabPioneer {
   exporters: Exporter[];
-  
+
   /**
    * Load exporters defined in the configuration file.
    */
@@ -67,7 +67,6 @@ class JupyterLabPioneer implements IJupyterLabPioneer {
     // When the global activeEvents configuration is null, exporters that do not have corresponding activeEvents will be ignored.
     console.log(processedExporters);
     this.exporters = processedExporters;
-    sendInfoNotification(processedExporters, true);
   }
 
   async publishEvent(
@@ -110,6 +109,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
   ) => {
     const version = await requestAPI<string>('version');
     console.log(`${PLUGIN_ID}: ${version}`);
+    const config = (await requestAPI<any>('config')) as Config;
 
     const pioneer = new JupyterLabPioneer();
 
@@ -126,6 +126,8 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
         });
       }
     );
+
+    sendInfoNotification(config.exporters, true);
 
     return pioneer;
   }
