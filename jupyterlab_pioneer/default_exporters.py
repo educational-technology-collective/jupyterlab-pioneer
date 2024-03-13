@@ -14,6 +14,7 @@ Attributes:
 
 import json
 import os
+import datetime
 from collections.abc import Callable, Awaitable
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.httputil import HTTPHeaders
@@ -134,8 +135,13 @@ async def remote_exporter(args: dict) -> dict:
 
     """
     http_client = AsyncHTTPClient()
+    unix_timestamp = args["data"].get("eventDetail").get("eventTime")
+    utc_datetime = datetime.datetime.fromtimestamp(unix_timestamp/1000.0, tz=datetime.timezone.utc)
+    url = args.get("url")
+    if "s3" in args.get("id").lower():
+        url = "%s/%d/%d/%d/%d" % (args.get("url"), utc_datetime.year, utc_datetime.month, utc_datetime.day, utc_datetime.hour)
     request = HTTPRequest(
-        url=args.get("url"),
+        url=url,
         method="POST",
         body=json.dumps(
             {
