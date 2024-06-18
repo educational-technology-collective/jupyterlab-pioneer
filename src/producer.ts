@@ -503,10 +503,10 @@ const getVisibleCells = (notebookPanel: NotebookPanel) => {
 
     const cellTop = cell.node.offsetTop;
     const cellBottom = cell.node.offsetTop + cell.node.offsetHeight;
-    const viewTop = notebookPanel.content.node.scrollTop;
+    const viewTop = notebookPanel.node.getElementsByClassName('jp-WindowedPanel-outer')[0].scrollTop;
     const viewBottom =
-      notebookPanel.content.node.scrollTop +
-      notebookPanel.content.node.clientHeight;
+      notebookPanel.content.node.getElementsByClassName('jp-WindowedPanel-outer')[0].scrollTop +
+      notebookPanel.content.node.getElementsByClassName('jp-WindowedPanel-outer')[0].clientHeight;
 
     if (cellTop <= viewBottom && cellBottom >= viewTop) {
       visibleCells.push({
