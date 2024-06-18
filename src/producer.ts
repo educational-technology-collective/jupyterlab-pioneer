@@ -294,7 +294,7 @@ export class ClipboardCopyEventProducer {
         if (
           exporter.activeEvents
             ?.map(o => o.name)
-            .includes(CellRemoveEventProducer.id)
+            .includes(ClipboardCopyEventProducer.id)
         ) {
           await pioneer.publishEvent(
             notebookPanel,
@@ -334,7 +334,7 @@ export class ClipboardCutEventProducer {
         if (
           exporter.activeEvents
             ?.map(o => o.name)
-            .includes(CellRemoveEventProducer.id)
+            .includes(ClipboardCutEventProducer.id)
         ) {
           await pioneer.publishEvent(
             notebookPanel,
@@ -376,7 +376,7 @@ export class ClipboardPasteEventProducer {
         if (
           exporter.activeEvents
             ?.map(o => o.name)
-            .includes(CellRemoveEventProducer.id)
+            .includes(ClipboardPasteEventProducer.id)
         ) {
           await pioneer.publishEvent(
             notebookPanel,
@@ -410,7 +410,7 @@ export class NotebookHiddenEventProducer {
           if (
             exporter.activeEvents
               ?.map(o => o.name)
-              .includes(CellRemoveEventProducer.id)
+              .includes(NotebookHiddenEventProducer.id)
           ) {
             await pioneer.publishEvent(
               notebookPanel,
@@ -444,7 +444,7 @@ export class NotebookOpenEventProducer {
         if (
           exporter.activeEvents
             ?.map(o => o.name)
-            .includes(CellRemoveEventProducer.id)
+            .includes(NotebookOpenEventProducer.id)
         ) {
           await pioneer.publishEvent(
             notebookPanel,
@@ -477,7 +477,7 @@ export class NotebookSaveEventProducer {
             if (
               exporter.activeEvents
                 ?.map(o => o.name)
-                .includes(CellRemoveEventProducer.id)
+                .includes(NotebookSaveEventProducer.id)
             ) {
               await pioneer.publishEvent(
                 notebookPanel,
@@ -524,7 +524,7 @@ export class NotebookScrollEventProducer {
   private timeout = 0;
 
   listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
-    notebookPanel.content.node.addEventListener('scroll', async (e: Event) => {
+    notebookPanel.node.getElementsByClassName('jp-WindowedPanel-outer')[0].addEventListener('scroll', async (e: Event) => {
       e.stopPropagation();
       clearTimeout(this.timeout);
       await new Promise(
@@ -541,7 +541,7 @@ export class NotebookScrollEventProducer {
         if (
           exporter.activeEvents
             ?.map(o => o.name)
-            .includes(CellRemoveEventProducer.id)
+            .includes(NotebookScrollEventProducer.id)
         ) {
           await pioneer.publishEvent(
             notebookPanel,
