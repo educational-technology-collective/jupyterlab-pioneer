@@ -23,7 +23,8 @@ export class ActiveCellChangeEventProducer {
             id: cell?.model.id,
             index: notebookPanel.content.widgets.findIndex(
               value => value === cell
-            )
+            ),
+            type: cell?.model.type
           };
           const event = {
             eventName: ActiveCellChangeEventProducer.id,
@@ -63,7 +64,8 @@ export class CellAddEventProducer {
         if (args.type === 'add') {
           const addedCell = {
             id: args.newValues[0].id,
-            index: args.newIndex
+            index: args.newIndex,
+            type: args.newValues[0].type
           };
           const event = {
             eventName: CellAddEventProducer.id,
@@ -109,7 +111,8 @@ export class CellEditEventProducer {
           index: notebookPanel.content.widgets.findIndex(
             value => value === cell
           ),
-          doc: editor?.state?.doc?.toJSON() // send entire cell content if this is a new cell
+          doc: editor?.state?.doc?.toJSON(), // send entire cell content if this is a new cell,
+          type: cell?.model.type
         }
       };
       pioneer.exporters.forEach(async exporter => {
@@ -143,7 +146,8 @@ export class CellEditEventProducer {
                 index: notebookPanel.content.widgets.findIndex(
                   value => value === cell
                 ),
-                changes: v.changes.toJSON() // send changes
+                changes: v.changes.toJSON(), // send changes
+                type: cell?.model.type
               }
             };
             pioneer.exporters.forEach(async exporter => {
@@ -198,7 +202,8 @@ export class CellExecuteEventProducer {
         if (notebookPanel.content === args.notebook) {
           const executedCell = {
             id: args.cell.model.id,
-            index: args.notebook.widgets.findIndex(value => value == args.cell)
+            index: args.notebook.widgets.findIndex(value => value == args.cell),
+            type: args.cell.model.type
           };
           const event = {
             eventName: CellExecuteEventProducer.id,
@@ -239,7 +244,8 @@ export class CellRemoveEventProducer {
       async (_, args: IObservableList.IChangedArgs<ICellModel>) => {
         if (args.type === 'remove') {
           const removedCell = {
-            index: args.oldIndex
+            index: args.oldIndex,
+            type: notebookPanel.content.model?.cells.get(args.oldIndex).type
           };
           const event = {
             eventName: CellRemoveEventProducer.id,
@@ -279,7 +285,8 @@ export class ClipboardCopyEventProducer {
         id: notebookPanel.content.activeCell?.model.id,
         index: notebookPanel.content.widgets.findIndex(
           value => value === notebookPanel.content.activeCell
-        )
+        ),
+        type: notebookPanel.content.activeCell?.model.type
       };
       const text = document.getSelection()?.toString();
       const event = {
@@ -319,7 +326,8 @@ export class ClipboardCutEventProducer {
         id: notebookPanel.content.activeCell?.model.id,
         index: notebookPanel.content.widgets.findIndex(
           value => value === notebookPanel.content.activeCell
-        )
+        ),
+        type: notebookPanel.content.activeCell?.model.type
       };
       const text = document.getSelection()?.toString();
       const event = {
@@ -359,7 +367,8 @@ export class ClipboardPasteEventProducer {
         id: notebookPanel.content.activeCell?.model.id,
         index: notebookPanel.content.widgets.findIndex(
           value => value === notebookPanel.content.activeCell
-        )
+        ),
+        type: notebookPanel.content.activeCell?.model.type
       };
       const text = (e.clipboardData || (window as any).clipboardData).getData(
         'text'
@@ -503,15 +512,22 @@ const getVisibleCells = (notebookPanel: NotebookPanel) => {
 
     const cellTop = cell.node.offsetTop;
     const cellBottom = cell.node.offsetTop + cell.node.offsetHeight;
-    const viewTop = notebookPanel.node.getElementsByClassName('jp-WindowedPanel-outer')[0].scrollTop;
+    const viewTop = notebookPanel.node.getElementsByClassName(
+      'jp-WindowedPanel-outer'
+    )[0].scrollTop;
     const viewBottom =
-      notebookPanel.content.node.getElementsByClassName('jp-WindowedPanel-outer')[0].scrollTop +
-      notebookPanel.content.node.getElementsByClassName('jp-WindowedPanel-outer')[0].clientHeight;
+      notebookPanel.content.node.getElementsByClassName(
+        'jp-WindowedPanel-outer'
+      )[0].scrollTop +
+      notebookPanel.content.node.getElementsByClassName(
+        'jp-WindowedPanel-outer'
+      )[0].clientHeight;
 
     if (cellTop <= viewBottom && cellBottom >= viewTop) {
       visibleCells.push({
         id: cell.model.id,
-        index: index
+        index: index,
+        type: cell.model.type
       });
     }
   }
@@ -524,36 +540,38 @@ export class NotebookScrollEventProducer {
   private timeout = 0;
 
   listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
-    notebookPanel.node.getElementsByClassName('jp-WindowedPanel-outer')[0].addEventListener('scroll', async (e: Event) => {
-      e.stopPropagation();
-      clearTimeout(this.timeout);
-      await new Promise(
-        resolve => (this.timeout = window.setTimeout(resolve, 1500))
-      ); // wait 1.5 seconds before preceding
-      const event = {
-        eventName: NotebookScrollEventProducer.id,
-        eventTime: Date.now(),
-        eventInfo: {
-          cells: getVisibleCells(notebookPanel)
-        }
-      };
-      pioneer.exporters.forEach(async exporter => {
-        if (
-          exporter.activeEvents
-            ?.map(o => o.name)
-            .includes(NotebookScrollEventProducer.id)
-        ) {
-          await pioneer.publishEvent(
-            notebookPanel,
-            event,
-            exporter,
-            exporter.activeEvents?.find(
-              o => o.name == NotebookScrollEventProducer.id
-            )?.logWholeNotebook
-          );
-        }
+    notebookPanel.node
+      .getElementsByClassName('jp-WindowedPanel-outer')[0]
+      .addEventListener('scroll', async (e: Event) => {
+        e.stopPropagation();
+        clearTimeout(this.timeout);
+        await new Promise(
+          resolve => (this.timeout = window.setTimeout(resolve, 1500))
+        ); // wait 1.5 seconds before preceding
+        const event = {
+          eventName: NotebookScrollEventProducer.id,
+          eventTime: Date.now(),
+          eventInfo: {
+            cells: getVisibleCells(notebookPanel)
+          }
+        };
+        pioneer.exporters.forEach(async exporter => {
+          if (
+            exporter.activeEvents
+              ?.map(o => o.name)
+              .includes(NotebookScrollEventProducer.id)
+          ) {
+            await pioneer.publishEvent(
+              notebookPanel,
+              event,
+              exporter,
+              exporter.activeEvents?.find(
+                o => o.name == NotebookScrollEventProducer.id
+              )?.logWholeNotebook
+            );
+          }
+        });
       });
-    });
   }
 }
 
