@@ -139,7 +139,7 @@ async def remote_exporter(args: dict) -> dict:
     utc_datetime = datetime.datetime.fromtimestamp(unix_timestamp/1000.0, tz=datetime.timezone.utc)
     url = args.get("url")
     if "s3" in args.get("id").lower():
-        url = "%s/%d/%d/%d/%d" % (args.get("url"), utc_datetime.year, utc_datetime.month, utc_datetime.day, utc_datetime.hour)
+        url = "%s/%d/%02d/%02d/%02d" % (args.get("url"), utc_datetime.year, utc_datetime.month, utc_datetime.day, utc_datetime.hour)
     request = HTTPRequest(
         url=url,
         method="POST",
