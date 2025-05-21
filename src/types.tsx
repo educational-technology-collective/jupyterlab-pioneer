@@ -24,11 +24,11 @@ export interface ExporterArgs {
   /**
    * Additional parameters to pass to the http endpoint (optional for remote exporter)
    */
-  params?: Object;
+  params?: object;
   /**
    * Environment variables to pass to the http endpoint (optional for remote exporter)
    */
-  env?: Object[];
+  env?: object[];
 }
 
 export interface Exporter {
