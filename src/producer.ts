@@ -44,7 +44,7 @@ export class ActiveCellChangeEventProducer {
                 event,
                 exporter,
                 exporter.activeEvents?.find(
-                  o => o.name == ActiveCellChangeEventProducer.id
+                  o => o.name === ActiveCellChangeEventProducer.id
                 )?.logWholeNotebook
               );
             }
@@ -85,7 +85,7 @@ export class CellAddEventProducer {
                 event,
                 exporter,
                 exporter.activeEvents?.find(
-                  o => o.name == CellAddEventProducer.id
+                  o => o.name === CellAddEventProducer.id
                 )?.logWholeNotebook
               );
             }
@@ -125,8 +125,9 @@ export class CellEditEventProducer {
             notebookPanel,
             event,
             exporter,
-            exporter.activeEvents?.find(o => o.name == CellEditEventProducer.id)
-              ?.logWholeNotebook
+            exporter.activeEvents?.find(
+              o => o.name === CellEditEventProducer.id
+            )?.logWholeNotebook
           );
         }
       });
@@ -195,14 +196,16 @@ export class CellExecuteEventProducer {
         args: {
           notebook: Notebook;
           cell: Cell<ICellModel>;
-          success: Boolean;
+          success: boolean;
           error?: KernelError | null | undefined;
         }
       ) => {
         if (notebookPanel.content === args.notebook) {
           const executedCell = {
             id: args.cell.model.id,
-            index: args.notebook.widgets.findIndex(value => value == args.cell),
+            index: args.notebook.widgets.findIndex(
+              value => value === args.cell
+            ),
             type: args.cell.model.type
           };
           const event = {
@@ -225,7 +228,7 @@ export class CellExecuteEventProducer {
                 event,
                 exporter,
                 exporter.activeEvents?.find(
-                  o => o.name == CellExecuteEventProducer.id
+                  o => o.name === CellExecuteEventProducer.id
                 )?.logWholeNotebook
               );
             }
@@ -265,7 +268,7 @@ export class CellRemoveEventProducer {
                 event,
                 exporter,
                 exporter.activeEvents?.find(
-                  o => o.name == CellRemoveEventProducer.id
+                  o => o.name === CellRemoveEventProducer.id
                 )?.logWholeNotebook
               );
             }
@@ -308,7 +311,7 @@ export class ClipboardCopyEventProducer {
             event,
             exporter,
             exporter.activeEvents?.find(
-              o => o.name == ClipboardCopyEventProducer.id
+              o => o.name === ClipboardCopyEventProducer.id
             )?.logWholeNotebook
           );
         }
@@ -349,7 +352,7 @@ export class ClipboardCutEventProducer {
             event,
             exporter,
             exporter.activeEvents?.find(
-              o => o.name == ClipboardCutEventProducer.id
+              o => o.name === ClipboardCutEventProducer.id
             )?.logWholeNotebook
           );
         }
@@ -392,7 +395,7 @@ export class ClipboardPasteEventProducer {
             event,
             exporter,
             exporter.activeEvents?.find(
-              o => o.name == ClipboardPasteEventProducer.id
+              o => o.name === ClipboardPasteEventProducer.id
             )?.logWholeNotebook
           );
         }
@@ -426,7 +429,7 @@ export class NotebookHiddenEventProducer {
               event,
               exporter,
               exporter.activeEvents?.find(
-                o => o.name == NotebookHiddenEventProducer.id
+                o => o.name === NotebookHiddenEventProducer.id
               )?.logWholeNotebook
             );
           }
@@ -460,7 +463,7 @@ export class NotebookOpenEventProducer {
             event,
             exporter,
             exporter.activeEvents?.find(
-              o => o.name == NotebookOpenEventProducer.id
+              o => o.name === NotebookOpenEventProducer.id
             )?.logWholeNotebook
           );
           this.produced = true;
@@ -493,7 +496,7 @@ export class NotebookSaveEventProducer {
                 event,
                 exporter,
                 exporter.activeEvents?.find(
-                  o => o.name == NotebookSaveEventProducer.id
+                  o => o.name === NotebookSaveEventProducer.id
                 )?.logWholeNotebook
               );
             }
@@ -566,7 +569,7 @@ export class NotebookScrollEventProducer {
               event,
               exporter,
               exporter.activeEvents?.find(
-                o => o.name == NotebookScrollEventProducer.id
+                o => o.name === NotebookScrollEventProducer.id
               )?.logWholeNotebook
             );
           }
@@ -602,7 +605,7 @@ export class NotebookVisibleEventProducer {
               event,
               exporter,
               exporter.activeEvents?.find(
-                o => o.name == NotebookVisibleEventProducer.id
+                o => o.name === NotebookVisibleEventProducer.id
               )?.logWholeNotebook
             );
           }

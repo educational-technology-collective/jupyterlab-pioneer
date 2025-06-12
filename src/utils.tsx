@@ -15,7 +15,8 @@ export const sendInfoNotification = (
   if (isGlobal && exporterMessage) {
     message = `Telemetry data is being logged to ${exporterMessage} through jupyterlab-pioneer. \n See Help menu -> JupyterLab Pioneer for more details.`;
   } else if (isGlobal && !exporterMessage) {
-    message = `Telemetry data is being logged through jupyterlab-pioneer. \n See Help menu -> JupyterLab Pioneer for more details.`;
+    message =
+      'Telemetry data is being logged through jupyterlab-pioneer. \n See Help menu -> JupyterLab Pioneer for more details.';
   } else {
     message = `Embedded telemetry settings loaded. Telemetry data is being logged to ${exporterMessage} now.`;
   }

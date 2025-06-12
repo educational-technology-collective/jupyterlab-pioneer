@@ -136,11 +136,7 @@
                     "selector": "interface",
                     "format": [
                         "PascalCase"
-                    ],
-                    "custom": {
-                        "regex": "^I[A-Z]",
-                        "match": true
-                    }
+                    ]
                 }
             ],
             "@typescript-eslint/no-unused-vars": [
