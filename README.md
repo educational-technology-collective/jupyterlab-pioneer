@@ -1,9 +1,7 @@
 # JupyterLab Pioneer
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
-
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![PyPI](https://img.shields.io/pypi/v/jupyterlab-pioneer.svg)](https://pypi.org/project/jupyterlab-pioneer)
@@ -197,11 +195,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mengyanw"><img src="https://avatars.githubusercontent.com/u/85606983?v=4?s=100" width="100px;" alt="mengyanw"/><br /><sub><b>Mengyan Wu</b></sub></a><br /><a href="#code-mengyanw" title="Code">💻</a> <a href="#ideas-mengyanw" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-mengyanw" title="Maintenance">🚧</a> <a href="#projectManagement-mengyanw" title="Project Management">📆</a> <a href="#infra-mengyanw" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#tests-mengyanw" title="Tests">⚠️</a> <a href="#documentation-mengyanw" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mengyanw"><img src="https://avatars.githubusercontent.com/u/85606983?v=4?s=100" width="100px;" alt="mengyanw"/><br /><sub><b>mengyanw</b></sub></a><br /><a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=mengyanw" title="Code">💻</a> <a href="#ideas-mengyanw" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-mengyanw" title="Maintenance">🚧</a> <a href="#projectManagement-mengyanw" title="Project Management">📆</a> <a href="#infra-mengyanw" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=mengyanw" title="Tests">⚠️</a> <a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=mengyanw" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://christopherbrooks.ca"><img src="https://avatars.githubusercontent.com/u/1355641?v=4?s=100" width="100px;" alt="Christopher Brooks"/><br /><sub><b>Christopher Brooks</b></sub></a><br /><a href="#ideas-cab938" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-cab938" title="Project Management">📆</a> <a href="#infra-cab938" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://from.so/Steve_Oney"><img src="https://avatars.githubusercontent.com/u/211262?v=4?s=100" width="100px;" alt="Steve Oney"/><br /><sub><b>Steve Oney</b></sub></a><br /><a href="#ideas-soney" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-soney" title="Project Management">📆</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.chrisostrouchov.com"><img src="https://avatars.githubusercontent.com/u/1740337?v=4?s=100" width="100px;" alt="Christopher Ostrouchov"/><br /><sub><b>Christopher Ostrouchov</b></sub></a><br /><a href="#ideas-costrouc" title="Ideas, Planning, & Feedback">🤔</a> <a href="#ideas-costrouc" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.chrisostrouchov.com"><img src="https://avatars.githubusercontent.com/u/1740337?v=4?s=100" width="100px;" alt="Christopher Ostrouchov"/><br /><sub><b>Christopher Ostrouchov</b></sub></a><br /><a href="#ideas-costrouc" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=costrouc" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://iamit.in"><img src="https://avatars.githubusercontent.com/u/5647941?v=4?s=100" width="100px;" alt="Amit Kumar"/><br /><sub><b>Amit Kumar</b></sub></a><br /><a href="#infra-aktech" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/cmarmo"><img src="https://avatars.githubusercontent.com/u/1662261?v=4?s=100" width="100px;" alt="Chiara Marmo"/><br /><sub><b>Chiara Marmo</b></sub></a><br /><a href="https://github.com/educational-technology-collective/jupyterlab-pioneer/commits?author=cmarmo" title="Code">💻</a> <a href="#infra-cmarmo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
     </tr>
   </tbody>
 </table>
