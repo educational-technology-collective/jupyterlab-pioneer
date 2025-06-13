@@ -1,6 +1,6 @@
 {
     "name": "jupyterlab-pioneer",
-    "version": "1.6.0",
+    "version": "1.7.0",
     "description": "A JupyterLab extension.",
     "keywords": [
         "jupyter",
