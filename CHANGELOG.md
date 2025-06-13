@@ -2,6 +2,12 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 1.7.1
+
+No merged PRs
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 1.7.0
 
 ([Full Changelog](https://github.com/educational-technology-collective/jupyterlab-pioneer/compare/68495f1461e20eaa5aaf9973ea4c23d426a30885...d6c9fdfc24df7f83b0a267c01797d9442d594c10))
@@ -25,5 +31,3 @@
 ([GitHub contributors page for this release](https://github.com/educational-technology-collective/jupyterlab-pioneer/graphs/contributors?from=2023-09-12&to=2025-06-13&type=c))
 
 [@allcontributors](https://github.com/search?q=repo%3Aeducational-technology-collective%2Fjupyterlab-pioneer+involves%3Aallcontributors+updated%3A2023-09-12..2025-06-13&type=Issues) | [@cmarmo](https://github.com/search?q=repo%3Aeducational-technology-collective%2Fjupyterlab-pioneer+involves%3Acmarmo+updated%3A2023-09-12..2025-06-13&type=Issues) | [@costrouc](https://github.com/search?q=repo%3Aeducational-technology-collective%2Fjupyterlab-pioneer+involves%3Acostrouc+updated%3A2023-09-12..2025-06-13&type=Issues) | [@isumitjha](https://github.com/search?q=repo%3Aeducational-technology-collective%2Fjupyterlab-pioneer+involves%3Aisumitjha+updated%3A2023-09-12..2025-06-13&type=Issues) | [@mengyanw](https://github.com/search?q=repo%3Aeducational-technology-collective%2Fjupyterlab-pioneer+involves%3Amengyanw+updated%3A2023-09-12..2025-06-13&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
