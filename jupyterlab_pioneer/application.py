@@ -41,6 +41,7 @@ class JupyterLabPioneerApp(ExtensionApp):
                 # {"name": "NotebookSaveEvent", "logWholeNotebook": False},
                 # {"name": "NotebookScrollEvent", "logWholeNotebook": False},
                 # {"name": "NotebookVisibleEvent", "logWholeNotebook": False},
+                # {"name": "MouseMoveEvent", "logWholeNotebook": False},
             ]
     """
 

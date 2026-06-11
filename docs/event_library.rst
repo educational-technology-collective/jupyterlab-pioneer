@@ -50,3 +50,6 @@ Event Library
    * - NotebookVisibleEvent
      - user navigates back to Jupyter Lab
      - visible cells when user navigates back
+   * - MouseMoveEvent
+     - user moves the pointer over the notebook panel
+     - pointer position (panel-relative and viewport), cell under pointer, active cell index (throttled to 500 ms)

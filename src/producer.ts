@@ -620,6 +620,80 @@ export class NotebookScrollEventProducer {
   }
 }
 
+const getCellIndexAtPoint = (
+  notebookPanel: NotebookPanel,
+  target: EventTarget | null
+): number | null => {
+  if (!target || !(target instanceof Node)) {
+    return null;
+  }
+
+  for (let index = 0; index < notebookPanel.content.widgets.length; index++) {
+    if (notebookPanel.content.widgets[index].node.contains(target)) {
+      return index;
+    }
+  }
+
+  return null;
+};
+
+export class MouseMoveEventProducer {
+  static id: string = 'MouseMoveEvent';
+  /** Minimum milliseconds between events while the pointer moves. */
+  private static readonly THROTTLE_MS = 500;
+  private lastEmitTime = 0;
+
+  listen(notebookPanel: NotebookPanel, pioneer: IJupyterLabPioneer) {
+    notebookPanel.node.addEventListener(
+      'mousemove',
+      async (e: MouseEvent) => {
+        const now = Date.now();
+        if (now - this.lastEmitTime < MouseMoveEventProducer.THROTTLE_MS) {
+          return;
+        }
+        this.lastEmitTime = now;
+
+        const rect = notebookPanel.node.getBoundingClientRect();
+        const activeCell = notebookPanel.content.activeCell;
+        const event = {
+          eventName: MouseMoveEventProducer.id,
+          eventTime: now,
+          eventInfo: {
+            x: Math.round(e.clientX - rect.left),
+            y: Math.round(e.clientY - rect.top),
+            clientX: e.clientX,
+            clientY: e.clientY,
+            cellIndex: getCellIndexAtPoint(notebookPanel, e.target),
+            activeCellIndex: activeCell
+              ? notebookPanel.content.widgets.findIndex(
+                  value => value === activeCell
+                )
+              : null
+          }
+        };
+
+        pioneer.exporters.forEach(async exporter => {
+          if (
+            exporter.activeEvents
+              ?.map(o => o.name)
+              .includes(MouseMoveEventProducer.id)
+          ) {
+            await pioneer.publishEvent(
+              notebookPanel,
+              event,
+              exporter,
+              exporter.activeEvents?.find(
+                o => o.name === MouseMoveEventProducer.id
+              )?.logWholeNotebook
+            );
+          }
+        });
+      },
+      { passive: true }
+    );
+  }
+}
+
 export class NotebookVisibleEventProducer {
   static id: string = 'NotebookVisibleEvent';
 
@@ -670,5 +744,6 @@ export const producerCollection = [
   NotebookOpenEventProducer,
   NotebookSaveEventProducer,
   NotebookScrollEventProducer,
-  NotebookVisibleEventProducer
+  NotebookVisibleEventProducer,
+  MouseMoveEventProducer
 ];

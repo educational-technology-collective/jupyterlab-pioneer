@@ -10,6 +10,10 @@ import { requestAPI } from './handler';
 import { producerCollection } from './producer';
 import { ActiveEvent, Config, Exporter } from './types';
 import { sendInfoNotification, addInfoToHelpMenu } from './utils';
+import {
+  addTelemetryToolbarSelect,
+  isTelemetryCollectionEnabled
+} from './telemetryControl';
 
 const PLUGIN_ID = 'jupyterlab-pioneer:plugin';
 
@@ -79,6 +83,9 @@ class JupyterLabPioneer implements IJupyterLabPioneer {
     if (!notebookPanel) {
       throw Error('router is listening to a null notebook panel');
     }
+    if (!isTelemetryCollectionEnabled(notebookPanel)) {
+      return;
+    }
     const requestBody = {
       eventDetail: eventDetail,
       notebookState: {
@@ -121,6 +128,7 @@ const plugin: JupyterFrontEndPlugin<JupyterLabPioneer> = {
         await notebookPanel.revealed;
         await notebookPanel.sessionContext.ready;
         await pioneer.loadExporters(notebookPanel);
+        addTelemetryToolbarSelect(notebookPanel);
 
         producerCollection.forEach(producer => {
           new producer().listen(notebookPanel, pioneer);
