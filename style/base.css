@@ -3,3 +3,28 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+
+/* Same look as the notebook cell-type dropdown (Code / Markdown / Raw). */
+
+.jp-Notebook-toolbarTelemetryDropdown select {
+  background-color: initial;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--jp-ui-font-color0);
+  display: block;
+  font-size: var(--jp-ui-font-size1);
+  font-family: var(--jp-ui-font-family);
+  height: 24px;
+  line-height: 14px;
+  padding: 0 25px 0 10px;
+  text-align: left;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+.jp-Notebook-toolbarTelemetryDropdown select:hover,
+.jp-Notebook-toolbarTelemetryDropdown select > option {
+  background-color: var(--jp-layout-color2);
+  color: var(--jp-ui-font-color0);
+}
